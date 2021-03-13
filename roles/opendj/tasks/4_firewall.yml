@@ -1,0 +1,46 @@
+---
+- name: 4.1 Open firewall on Oracle Linux
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  become: true
+  when: ansible_distribution == "OracleLinux"
+  with_items:
+    - "{{ opendj_port_ldap }}/tcp"
+    - "{{ opendj_port_ldaps }}/tcp"
+    - "{{ opendj_port_admin }}/tcp"
+    - "{{ opendj_port_replica }}/tcp"
+
+- name: 4.2 Open firewall on Ubuntu
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  become: true
+  when: ansible_distribution == "Ubuntu"
+  with_items:
+    - "{{ opendj_port_ldap }}"
+    - "{{ opendj_port_ldaps }}"
+    - "{{ opendj_port_admin }}"
+    - "{{ opendj_port_replica }}"
+
+- name: 4.3 Redirect port 389 to {{ opendj_port_ldap }} with Rich Rule
+  firewalld:
+    rich_rule: "rule family=ipv4 forward-port port=389 protocol=tcp to-port={{ opendj_port_ldap }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  become: true
+  when: ansible_distribution == "OracleLinux"
+
+- name: 4.4 Redirect port 636 to {{ opendj_port_ldaps }} with Rich Rule
+  firewalld:
+    rich_rule: "rule family=ipv4 forward-port port=636 protocol=tcp to-port={{ opendj_port_ldaps }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  become: true
+  when: ansible_distribution == "OracleLinux"
+
