@@ -10,6 +10,11 @@ My ansible roles and playbooks
 
 ---
 
+## EasyRSA - own PKI CA
+- pki_easyrsa - only installation, without *init-pki* or *build-ca*
+
+---
+
 ## Apache
 - apache - install Apache web server
 
