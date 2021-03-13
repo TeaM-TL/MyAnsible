@@ -21,7 +21,7 @@ My ansible roles and playbooks
 ---
 
 ## HA
-- ha_ip - flying IP
+- ha_keepalived - flying IP, highly parametrized, ready for more services
 - ha_cluster - cluster
 
 ---
