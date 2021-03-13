@@ -1,0 +1,52 @@
+---
+- name: 1 mkdir {{ easyrsa_main }}
+  file:
+    path: "{{ easyrsa_main }}"
+    owner: root
+    group: root
+    mode: "0700"
+    state: directory
+  become: true
+
+- name: 2.1 Download {{ easyrsa_tgz }} on Oracle Linux
+  get_url:
+    url: "{{ easyrsa_url }}"
+    dest: "/tmp/{{ easyrsa_tgz }}"
+  become: true
+  when: ansible_distribution == "OracleLinux"
+
+- name: 2.2 Unpack EasyRSA.tgz on Oracle Linux
+  unarchive:
+    src: "/tmp/{{ easyrsa_tgz }}"
+    dest: "{{ easyrsa_main }}"
+    owner: root
+    group: root
+    remote_src: true
+    extra_opts: --strip-components=1
+  become: true
+  when: ansible_distribution == "OracleLinux"
+
+- name: 2 Install on Ubuntu
+  apt:
+    name: easy-rsa
+    state: present
+  become: true
+  when: ansible_distribution == "Ubuntu"
+
+- name: 3 Copy default variables
+  template:
+    src: vars.j2
+    dest: "{{ easyrsa_main }}/vars"
+    owner: root
+    group: root
+    mode: "0640"
+  become: true
+
+  #- name: 4 init-pki
+  #  shell: "cd {{ easyrsa_main }}; {{ easyrsa_main }}/easyrsa init-pki"
+  #  become: true
+
+  #- name: 5 build-ca nopass
+  #  shell: "cd {{ easyrsa_main }}; {{ easyrsa_main }}/easyrsa build-ca nopass"
+  #  become: true
+

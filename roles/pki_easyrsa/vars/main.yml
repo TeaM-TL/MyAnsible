@@ -1,0 +1,6 @@
+---
+easyrsa_ver: '3.0.8'
+easyrsa_tgz: "EasyRSA-{{ easyrsa_ver }}.tgz"
+easyrsa_url: "https://github.com/OpenVPN/easy-rsa/releases/download/v{{ easyrsa_ver }}/{{ easyrsa_tgz }}"
+easyrsa_main: "/opt/CA"
+
