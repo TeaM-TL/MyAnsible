@@ -1,0 +1,23 @@
+vrrp_track_process {{ keepalive_trackname }} {
+    process {{ keepalive_process }}
+    weight {{ keepalive_weight }}
+}
+
+vrrp_instance VI_1 {
+    state MASTER
+    interface {{ keepalive_interface }}
+    virtual_router_id {{ keepalive_id }}
+    priority {{ keepalive_priority }}
+    advert_int {{ keepalive_advert }}
+    authentication {
+        auth_type PASS
+        auth_pass {{ keepalive_password }}
+    }
+    virtual_ipaddress {
+        {{ keepalive_vip }}
+    }
+    track_process {
+        {{ keepalive_trackname }}
+    }
+}
+

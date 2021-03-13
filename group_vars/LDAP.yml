@@ -1,4 +1,5 @@
 ---
+# OpenDJ
 ## Install temporary directory
 opendj_install: "/tmp/opendj_install"
 
@@ -31,4 +32,13 @@ opendj_url: "https://github.com/OpenIdentityPlatform/OpenDJ/releases/download/{{
 opendj_url_deb: "{{ opendj_url }}/{{ opendj_package_deb }}"
 opendj_url_rpm: "{{ opendj_url }}/{{ opendj_package_rpm }}"
 opendj_url_zip: "{{ opendj_url }}/{{ opendj_package_zip }}"
+
+
+# HA KeepAlive
+keepalive_trackname: "track_opendj"
+keepalive_process: "java"
+keepalive_id: 197
+keepalive_advert: '1'
+keepalive_password: "p@S5f0rD"
+keepalive_vip: "192.168.0.197"
 
