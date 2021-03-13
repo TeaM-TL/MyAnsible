@@ -1,0 +1,45 @@
+---
+- name: 6.1 OpenDJ logs setting
+  command: su - {{ opendj_user }} -c "{{ opendj_bin }}/dsconfig
+        set-log-publisher-prop
+        --publisher-name '{{ item.name }}'
+        --set log-file:{{ opendj_logs }}/{{ item.filename }}
+        --set enabled:{{ item.set }}
+        {{ dsconfig_common }}"
+  become: true
+  with_items:
+  - { name: "File-Based Access Logger",           filename: "access",      set: true }
+  - { name: "File-Based Audit Logger",            filename: "audit",       set: true }
+  - { name: "File-Based Debug Logger",            filename: "debug",       set: false }
+  - { name: "File-Based Error Logger",            filename: "errors",      set: true }
+  - { name: "File-Based HTTP Access Logger",      filename: "http-access", set: false }
+
+- name: 6.2 OpenDJ json logs setting
+  command: su - {{ opendj_user }} -c "{{ opendj_bin }}/dsconfig
+        set-log-publisher-prop
+        --publisher-name '{{ item.name }}'
+        --set log-directory:{{ opendj_logs }}/{{ item.dir }}
+        --set enabled:{{ item.set }}
+        {{ dsconfig_common }}"
+  become: true
+  with_items:
+  - { name: "Json File-Based Access Logger",      dir: "access",      set: false }
+  - { name: "Json File-Based HTTP Access Logger", dir: "access",      set: false }
+
+- name: 6.4 Set TLSv1.2 for client connection port 1636
+  command: su - {{ opendj_user }} -c "{{ opendj_bin }}/dsconfig
+        set-connection-handler-prop
+        --handler-name 'LDAPS Connection Handler'
+        --set ssl-protocol:TLSv1.2
+        {{ dsconfig_common }}"
+        #--trustStorePath {{ opendj_config }}/admin-truststore
+  become: true
+
+- name: 6.5 Set TLSv1.2 for administration connection port 4444
+  command: su - {{ opendj_user }} -c "{{ opendj_bin }}/dsconfig
+        set-administration-connector-prop
+        --set ssl-protocol:TLSv1.2
+        {{ dsconfig_common }}"
+        #--trustStorePath {{ opendj_config }}/admin-truststore
+  become: true
+

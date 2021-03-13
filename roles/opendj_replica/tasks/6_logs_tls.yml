@@ -1,0 +1,21 @@
+---
+- name: 6.3 OpenDJ replication log setting
+  command: su - {{ opendj_user }} -c "{{ opendj_bin }}/dsconfig
+        set-log-publisher-prop
+        --publisher-name '{{ item.name }}'
+        --set log-file:{{ opendj_logs }}/{{ item.filename }}
+        --set enabled:{{ item.set }}
+        {{ dsconfig_common }}"
+  become: true
+  with_items:
+  - { name: "Replication Repair Logger", filename: "replication.log", set: true }
+
+- name: 6.6 Setting TLSv1.2 for replication connection port 8989
+  command: su - {{ opendj_user }} -c "{{ opendj_bin }}/dsconfig
+        set-crypto-manager-prop
+        --set ssl-encryption:true
+        --set ssl-protocol:TLSv1.3
+        {{ dsconfig_common }}"
+        #--trustStorePath {{ opendj_config }}/admin-truststore
+  become: true
+

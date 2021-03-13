@@ -1,0 +1,8 @@
+---
+- name: Install OpenDJ a LDAP server
+  #connection: local
+  hosts: LDAP
+  gather_facts: true
+  roles:
+  - role: opendj
+

@@ -1,0 +1,16 @@
+---
+- name: Install
+  import_tasks: 1_install.yml
+
+- name: Presets
+  import_tasks: 2_preset.yml
+
+- name: Setup OpenDJ
+  import_tasks: 3_setup.yml
+
+- name: Setup keystores
+  import_tasks: 4_keystores.yml
+
+- name: Setup logs and TLS
+  import_tasks: 6_logs_tls.yml
+

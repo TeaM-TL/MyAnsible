@@ -1,0 +1,72 @@
+---
+- name: 3.1 OpenDJ setup
+  command: su - {{ opendj_user }} -c "{{ opendj_root }}/setup
+           --cli
+           --baseDN {{ opendj_context }}
+           --ldapPort {{ opendj_port_ldap }}
+           --adminConnectorPort {{ opendj_port_admin }}
+           --rootUserDN 'cn=Directory Manager'
+           --rootUserPasswordFile {{ opendj_dm_password_file }}
+           --ldapsPort {{ opendj_port_ldaps }}
+           --usePkcs12keyStore {{ opendj_root }}/certs/keystore
+           --keySTorePasswordFile {{ opendj_root }}/certs/keystore.pin
+           --certNickname server-cert
+           --hostName {{ ansible_hostname }}
+           --noPropertiesFile
+           --doNotStart
+           --no-prompt"
+  become: true
+  #--addBaseEntry
+
+- name: 3.2 Copy keystores
+  copy:
+    src: "{{ opendj_root }}/certs/{{ item.file }}"
+    dest: "{{ opendj_config }}/{{ item.file }}"
+    owner: "{{ opendj_user }}"
+    group: "{{ opendj_group }}"
+    mode: "{{ item.mode }}"
+    remote_src: true
+  become: true
+  with_items:
+    - { file: "keystore",     mode: '0640' }
+    - { file: "keystore.pin", mode: '0600' }
+    - { file: "truststore",   mode: '0640' }
+
+- name: 3.3 Start OpenDJ
+  command: su -  {{ opendj_user }} -c "{{ opendj_bin }}/start-ds"
+  become: true
+
+- name: 3.4 Setup keystore
+  command: su - {{ opendj_user }} -c "{{ opendj_bin }}/dsconfig
+           set-key-manager-provider-prop
+           --provider-name PKCS12
+           --set key-store-file:{{ opendj_config }}/keystore
+           {{ dsconfig_common }}"
+  become: true
+
+- name: 3.5 Open firewall on Oracle Linux
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  become: true
+  when: ansible_distribution == "OracleLinux"
+  with_items:
+    - "{{ opendj_port_ldap }}/tcp"
+    - "{{ opendj_port_ldaps }}/tcp"
+    - "{{ opendj_port_admin }}/tcp"
+    - "{{ opendj_port_replica }}/tcp"
+
+- name: 3.5 Open firewall on Ubuntu
+  ufw:
+    rule: allow
+    name: "{{ item }}"
+  become: true
+  when: ansible_distribution == "Ubuntu"
+  with_items:
+    - "{{ opendj_port_ldap }}/tcp"
+    - "{{ opendj_port_ldaps }}/tcp"
+    - "{{ opendj_port_admin }}/tcp"
+    - "{{ opendj_port_replica }}/tcp"
+

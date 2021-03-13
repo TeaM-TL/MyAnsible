@@ -1,0 +1,67 @@
+---
+- name: 1.1 mk Install temporary directory
+  file:
+    path: "{{ opendj_install }}"
+    owner: "{{ opendj_user }}"
+    group: "{{ opendj_group }}"
+    mode: '0775'
+    state: directory
+  become: true
+
+- name: 1.2 Download OpenDJ for Ubuntu
+  get_url:
+    url: "{{ opendj_url_deb }}"
+    dest: "{{ opendj_install }}/{{ opendj_package_deb }}"
+  become: true
+  when: ansible_distribution == "Ubuntu"
+
+- name: 1.2 Download OpenDJ for Oracle Linux
+  get_url:
+    url: "{{ opendj_url_rpm }}"
+    dest: "{{ opendj_install }}/{{ opendj_package_rpm }}"
+  become: true
+  when: ansible_distribution == "OracleLinux"
+
+- name: 1.5 Stop OpenDJ
+  command: su -  {{ opendj_user }} -c "{{ opendj_bin }}/stop-ds"
+  become: true
+
+- name: 1.3 Upgrade OpenDJ on Ubuntu
+  apt:
+    deb: "{{ opendj_install }}/{{ opendj_package_deb }}"
+  become: true
+  when: ansible_distribution == "Ubuntu"
+
+- name: 1.3 Upgrade OpenDJ on Oracle Linux
+  yum:
+    name: "{{ opendj_install }}/{{ opendj_package_rpm }}"
+    state: present
+  become: true
+  when: ansible_distribution == "OracleLinux"
+
+- name: 1.4 Copy OpenDJ start script and update path
+  template:
+    src: opendj.j2
+    dest: /etc/init.d/opendj
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+  notify: "systemd reload daemon"
+
+- name: 1.6 OpenDJ directory ownership
+  file:
+    path: "{{ opendj_root }}"
+    owner: "{{ opendj_user }}"
+    group: "{{ opendj_group }}"
+    recurse: true
+  become: true
+
+- name: 1.7 Start OpenDJ
+  command: su -  {{ opendj_user }} -c "{{ opendj_bin }}/start-ds"
+  become: true
+
+- name: 1.8 Upgrade OpenDJ
+  command: su -  {{ opendj_user }} -c "{{ opendj_root}}/upgrade"
+  become: true
+

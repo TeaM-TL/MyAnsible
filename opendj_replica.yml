@@ -1,0 +1,8 @@
+---
+- name: Install replication between OpenDJ LDAP server
+  #connection: local
+  hosts: LDAP
+  gather_facts: true
+  roles:
+  - role: opendj_replica
+
