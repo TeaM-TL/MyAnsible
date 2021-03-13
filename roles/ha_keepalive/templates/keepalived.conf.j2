@@ -4,7 +4,7 @@ vrrp_track_process {{ keepalive_trackname }} {
 }
 
 vrrp_instance VI_1 {
-    state MASTER
+    state {{ keepalive_state }}
     interface {{ keepalive_interface }}
     virtual_router_id {{ keepalive_id }}
     priority {{ keepalive_priority }}
