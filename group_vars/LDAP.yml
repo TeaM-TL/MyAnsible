@@ -1,5 +1,5 @@
 ---
-# OpenDJ
+# ------------------ OpenDJ --------------------
 ## Install temporary directory
 opendj_install: "/tmp/opendj_install"
 
@@ -34,7 +34,7 @@ opendj_url_rpm: "{{ opendj_url }}/{{ opendj_package_rpm }}"
 opendj_url_zip: "{{ opendj_url }}/{{ opendj_package_zip }}"
 
 
-# HA KeepAlive
+# ------------------ HA Keepalived ------------------------
 keepalive_trackname: "track_opendj"
 keepalive_process: "java"
 keepalive_id: 197
