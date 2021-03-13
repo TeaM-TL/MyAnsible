@@ -3,6 +3,7 @@
   command: su - {{ opendj_user }} -c "{{ opendj_root }}/setup
            --cli
            --baseDN {{ opendj_context }}
+           --addBaseEntry
            --ldapPort {{ opendj_port_ldap }}
            --adminConnectorPort {{ opendj_port_admin }}
            --rootUserDN 'cn=Directory Manager'
@@ -11,12 +12,11 @@
            --usePkcs12keyStore {{ opendj_root }}/certs/keystore
            --keySTorePasswordFile {{ opendj_root }}/certs/keystore.pin
            --certNickname server-cert
-           --hostName {{ ansible_hostname }}
+           --hostName {{ ansible_fqdn }}
            --noPropertiesFile
            --doNotStart
            --no-prompt"
   become: true
-  #--addBaseEntry
 
 - name: 3.2 Copy keystores
   copy:
@@ -61,12 +61,13 @@
 - name: 3.5 Open firewall on Ubuntu
   ufw:
     rule: allow
-    name: "{{ item }}"
+    port: "{{ item }}"
+    proto: tcp
   become: true
   when: ansible_distribution == "Ubuntu"
   with_items:
-    - "{{ opendj_port_ldap }}/tcp"
-    - "{{ opendj_port_ldaps }}/tcp"
-    - "{{ opendj_port_admin }}/tcp"
-    - "{{ opendj_port_replica }}/tcp"
+    - "{{ opendj_port_ldap }}"
+    - "{{ opendj_port_ldaps }}"
+    - "{{ opendj_port_admin }}"
+    - "{{ opendj_port_replica }}"
 
