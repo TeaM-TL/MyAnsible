@@ -7,6 +7,7 @@ My ansible roles and playbooks
 - opendj - install OpenDJ
 - opendj_replica - setup replication between OpenDJ servers
 - opendj_upgrade - upgrade OpenDJ server
+- opendj_keepalived - flying IP for OpenDJ
 
 ---
 
@@ -16,18 +17,30 @@ My ansible roles and playbooks
 ---
 
 ## Apache
-- apache - install Apache web server
+- apache - install Apache web server with HTTPS
+- apache_cluster - pacemaker cluster for Apache
 
 ---
 
 ## MariaDB
-- mariadb - install multimaster cluster mariaDB
+- mariadb - install multimaster cluster MariaDB
+- mariadb_keepalived - flying IP for MariaDB
 
 ---
 
 ## HA
 - ha_keepalived - flying IP, highly parametrized, ready for more services
 - ha_cluster - cluster
+
+---
+
+## SSH
+- ssh_ldap - a ssh key from LDAP directory
+
+---
+
+## Cockpit
+- cockpit - own certificate for https connection
 
 ---
 
