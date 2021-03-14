@@ -5,6 +5,9 @@ My ansible roles and playbooks
 
 ## Ready
 
+### Cockpit
+- cockpit - install cockpit and add signed certificate for https connection
+
 ### Dnsmasq
 - dnsmasq_dns - as DNS
 - dnsmasq_dhcp - as DHCPd
@@ -31,9 +34,6 @@ My ansible roles and playbooks
 
 ### Chronyd
 - chronyd - time server and synchronize time
-
-### Cockpit
-- cockpit - install cockpit and add signed certificate for https connection
 
 ### Dnsmasq
 - dnsmasq_cluster - pacemaker cluster
