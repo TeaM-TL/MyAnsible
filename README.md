@@ -5,17 +5,21 @@ My ansible roles and playbooks
 
 ## Ready
 
-### OpenDJ - LDAP Directory Server
-- opendj - install OpenDJ
-- opendj_replica - setup replication between OpenDJ servers
-- opendj_upgrade - upgrade OpenDJ server
-- opendj_keepalived - flying IP for OpenDJ
+### Dnsmasq
+- dnsmasq_dns - as DNS
+- dnsmasq_dhcp - as DHCPd
 
 ### EasyRSA - own PKI CA
 - pki_easyrsa - only installation, without *init-pki* or *build-ca*
 
 ### HA
 - ha_keepalived - flying IP, highly parametrized, ready for more services
+
+### OpenDJ - LDAP Directory Server
+- opendj - install OpenDJ
+- opendj_replica - setup replication between OpenDJ servers
+- opendj_upgrade - upgrade OpenDJ server
+- opendj_keepalived - flying IP for OpenDJ
 
 ---
 
@@ -29,18 +33,16 @@ My ansible roles and playbooks
 - chronyd - time server and synchronize time
 
 ### Cockpit
-- cockpit - own certificate for https connection
+- cockpit - install cockpit and add signed certificate for https connection
 
 ### Dnsmasq
-- dnsmasq_dns - as DNS
-- dnsmasq_dhcp - as DHCPd
 - dnsmasq_cluster - pacemaker cluster
 
 ### HA
 - ha_cluster - pacemaker cluster
 
 ### MariaDB
-- mariadb - install multimaster cluster MariaDB
+- mariadb - install galera cluster MariaDB (multimaster)
 - mariadb_keepalived - flying IP for MariaDB
 
 ### OpenVPN
@@ -54,9 +56,10 @@ My ansible roles and playbooks
 - ssh_ldap - a ssh key from LDAP directory
 
 ### Zabbix
-- zabbix_client
 - zabbix_server
-- zabbix_opendj
+- zabbix_agent
+- zabbix_agent_opendj
+- zabbix_agent_galera
 
 ---
 

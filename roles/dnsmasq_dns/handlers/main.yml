@@ -1,0 +1,9 @@
+---
+name: restart daemon
+service:
+  name: dnsmasq
+  state: restarted
+  enabled: true
+listen: restart dnsmasq daemon
+become: true
+

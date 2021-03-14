@@ -1,0 +1,34 @@
+# nie przekazuj prostych nazw (bez kropki lub suffiksu domeny)
+domain-needed
+
+# nie przekazuj nierutowalnych adresów
+bogus-priv
+
+# filtruj nieużyteczne żądania Windows. Nie włączaj gdy używasz np. Kerberosa, XMPP
+#filterwin2k
+
+# nie korzystaj z DNSów z pliku /etc/resolv.conf
+no-resolv
+
+# interfejs na którym ma słuchać, jeśli mamy klika, a checmy wybrać jeden
+#interface=enp0s25
+
+# wielkość bufora DNS
+cache-size= {{ dnsmasq_cachesize }}
+
+# serwery DNS
+server={{ dnsmasq_dns1 }}
+server={{ dnsmasq_dns1 }}
+
+# rozwija nazwy dla lokalnych hostów (z dyrektywy local)
+expand-hosts
+
+# adresy dla domeny lokalnej pobierane są z */etc/host lub z DHCP
+local={{ dnsmasq_local }}
+
+# logowanie zapytań
+#log-queries
+
+# Przekierowanie zapytań, pozwala odcinać dostęp do serwisów
+address={{ dnsmasq_address }}
+

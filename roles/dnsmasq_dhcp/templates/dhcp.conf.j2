@@ -1,0 +1,27 @@
+# nazwa domeny, pozwala hostom DHCP na nazwy kwalifikowane (FQDN)
+domain={{ dnsmasq_domain }}
+
+# wyłączone interfejsy
+#no-dhcp-interface=wlo1
+
+# zakres adresów i czas przydziału adresu
+dhcp-range={{ dnsmasq_range }}
+
+# brama domyślna
+dhcp-option=option:router,{{ dnsmasq_router }}
+
+# serwer NTP
+dhcp-option=option:ntp-server,{{ dnsmasq_ntp }}
+
+# serwer DNS
+dhcp-option=option:dns-server,{{ dnsmasq_dns }}
+
+# maska sieciowa
+dhcp-option=option:netmask,{{ dnsmasq_mask }}
+
+# trwałe przypisanie adresu IP do adresu MAC
+#dhcp-host=11:22:33:44:55:66,192.168.2.216
+
+# wykluczenie adresu MAC, by nie otrzymał adresu z DHCP
+#dhcp-host=1a:2b:3c:4d:5e:6f,ignore
+

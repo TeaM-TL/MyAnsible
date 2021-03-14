@@ -1,0 +1,26 @@
+---
+- name: 1 Install dnsmasq OracleLinux
+  yum:
+    name: dnsmasq
+    state: present
+  become: true
+  when: ansible_distribution == "OracleLinux"
+  notify: "restart dnsmasq daemon"
+
+- name: 1 Install dnsmasq Ubuntu
+  apt:
+    name: dnsmasq
+    state: present
+  when: ansible_distribution == "Ubuntu"
+  notify: "restart dnsmasq daemon"
+
+- name: 2 Copy DNS config
+  template:
+    src: dns.conf.j2
+    dest: /etc/dnsmasq.d/dns.conf
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+  notify: "restart dnsmasq daemon"
+

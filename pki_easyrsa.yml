@@ -1,0 +1,7 @@
+---
+- name: Install EasyRSA as CA
+  hosts: PKI
+  gather_facts: true
+  roles:
+  - role: pki_easyrsa
+

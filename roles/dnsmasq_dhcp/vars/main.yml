@@ -1,0 +1,8 @@
+---
+# DHCPd
+dnsmasq_domain: "team-tl.intranet"
+dnsmasq_range: "192.168.2.200,192.168.2.250,12h"
+dnsmasq_router: "192.168.2.1"
+dnsmasq_ntp: "192.168.2.163"
+dnsmasq_dns: "192.168.2.100"
+dnsmasq_mask: "255.255.255.0"

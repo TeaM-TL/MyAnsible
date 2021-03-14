@@ -16,7 +16,7 @@
 - name: 1.3 Install JDK on Ubuntu
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
   become: true
   when: ansible_distribution == "Ubuntu"
   with_items:
@@ -26,7 +26,7 @@
 - name: 1.3 Install JDK on Oracle Linux
   yum:
     name: "{{ item }}"
-    state: latest
+    state: present
   become: true
   when: ansible_distribution == "OracleLinux"
   with_items:
