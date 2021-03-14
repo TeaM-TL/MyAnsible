@@ -14,13 +14,8 @@ My ansible roles and playbooks
 ### EasyRSA - own PKI CA
 - pki_easyrsa - only installation, without *init-pki* or *build-ca*
 
----
-
-## In progress
-
 ### HA
 - ha_keepalived - flying IP, highly parametrized, ready for more services
-- ha_cluster - cluster
 
 ---
 
@@ -30,15 +25,38 @@ My ansible roles and playbooks
 - apache - install Apache web server with HTTPS
 - apache_cluster - pacemaker cluster for Apache
 
+### Chronyd
+- chronyd - time server and synchronize time
+
+### Cockpit
+- cockpit - own certificate for https connection
+
+### Dnsmasq
+- dnsmasq_dns - as DNS
+- dnsmasq_dhcp - as DHCPd
+- dnsmasq_cluster - pacemaker cluster
+
+### HA
+- ha_cluster - pacemaker cluster
+
 ### MariaDB
 - mariadb - install multimaster cluster MariaDB
 - mariadb_keepalived - flying IP for MariaDB
 
+### OpenVPN
+- openvpn_ldap
+
+### Server
+- server_minimal - typical configuration after installation
+- server_kickstart - preparing unattende installation
+
 ### SSH
 - ssh_ldap - a ssh key from LDAP directory
 
-### Cockpit
-- cockpit - own certificate for https connection
+### Zabbix
+- zabbix_client
+- zabbix_server
+- zabbix_opendj
 
 ---
 
