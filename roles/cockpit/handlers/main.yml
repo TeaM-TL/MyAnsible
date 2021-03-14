@@ -1,9 +1,9 @@
 ---
 - name: restart daemon
   service:
-    name: dnsmasq
+    name: cockpit
     state: restarted
     enabled: true
-  listen: restart dnsmasq daemon
+  listen: restart cockpit daemon
   become: true
 
