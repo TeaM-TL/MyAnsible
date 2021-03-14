@@ -42,7 +42,7 @@ My ansible roles and playbooks
 - ha_cluster - pacemaker cluster
 
 ### MariaDB
-- mariadb - install galera cluster MariaDB (multimaster)
+- mariadb - install Galera cluster MariaDB (multimaster)
 - mariadb_keepalived - flying IP for MariaDB
 
 ### OpenVPN
@@ -57,9 +57,10 @@ My ansible roles and playbooks
 
 ### Zabbix
 - zabbix_server
+- zabbix_server_cluster - pacemaker cluster
 - zabbix_agent
-- zabbix_agent_opendj
-- zabbix_agent_galera
+- zabbix_agent_opendj - monitoring OpenDJ
+- zabbix_agent_galera - monitoring MariaDB Galera Cluster
 
 ---
 
