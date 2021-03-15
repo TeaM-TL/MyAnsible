@@ -31,16 +31,16 @@
     - { file: "keystore",     mode: '0640' }
     - { file: "keystore.pin", mode: '0600' }
     - { file: "truststore",   mode: '0640' }
+    - { file: "truststore.pin", mode: '0600' }
+    - { file: "ads-keystore",     mode: '0640' }
+    - { file: "ads-keystore.pin", mode: '0600' }
+    - { file: "ads-truststore",   mode: '0640' }
+    - { file: "ads-truststore.pin", mode: '0600' }
+    - { file: "admin-keystore", mode: '0640' }
+    - { file: "admin-truststore", mode: '0640' }
+    - { file: "admin-keystore.pin", mode: '0600' }
 
 - name: 3.3 Start OpenDJ
   command: su -  {{ opendj_user }} -c "{{ opendj_bin }}/start-ds"
-  become: true
-
-- name: 3.4 Setup keystore
-  command: su - {{ opendj_user }} -c "{{ opendj_bin }}/dsconfig
-           set-key-manager-provider-prop
-           --provider-name PKCS12
-           --set key-store-file:{{ opendj_config }}/keystore
-           {{ dsconfig_common }}"
   become: true
 

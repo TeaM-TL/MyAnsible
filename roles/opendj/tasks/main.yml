@@ -8,11 +8,11 @@
 - name: Setup OpenDJ
   import_tasks: 3_setup.yml
 
-- name: Firewall
-  import_tasks: 4_firewall.yml
-
 - name: Setup keystores
-  import_tasks: 5_keystores.yml
+  import_tasks: 4_keystores.yml
+
+- name: Firewall
+  import_tasks: 5_firewall.yml
 
 - name: Setup logs and TLS
   import_tasks: 6_logs_tls.yml
