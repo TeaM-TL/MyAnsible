@@ -18,29 +18,3 @@
            --no-prompt"
   become: true
 
-- name: 3.2 Copy keystores
-  copy:
-    src: "{{ opendj_root }}/certs/{{ item.file }}"
-    dest: "{{ opendj_config }}/{{ item.file }}"
-    owner: "{{ opendj_user }}"
-    group: "{{ opendj_group }}"
-    mode: "{{ item.mode }}"
-    remote_src: true
-  become: true
-  with_items:
-    - { file: "keystore",     mode: '0640' }
-    - { file: "keystore.pin", mode: '0600' }
-    - { file: "truststore",   mode: '0640' }
-    - { file: "truststore.pin", mode: '0600' }
-    - { file: "ads-keystore",     mode: '0640' }
-    - { file: "ads-keystore.pin", mode: '0600' }
-    - { file: "ads-truststore",   mode: '0640' }
-    - { file: "ads-truststore.pin", mode: '0600' }
-    - { file: "admin-keystore", mode: '0640' }
-    - { file: "admin-truststore", mode: '0640' }
-    - { file: "admin-keystore.pin", mode: '0600' }
-
-- name: 3.3 Start OpenDJ
-  command: su -  {{ opendj_user }} -c "{{ opendj_bin }}/start-ds"
-  become: true
-
