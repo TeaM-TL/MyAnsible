@@ -8,9 +8,10 @@
 
 - name: 1.2 Add OpenDJ into PATH in .bashrc
   lineinfile:
-    path: "/home/{{ opendj_user }}"
+    path: "/home/{{ opendj_user }}/.bashrc"
     line: "PATH={{ opendj_bin }}:$PATH"
     create: yes
+  become: true
 
 - name: 1.3 mk Install temporary directory
   file:
