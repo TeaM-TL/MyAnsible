@@ -1,5 +1,14 @@
 ---
-- name: 5.1 Open firewall on Oracle Linux
+- name: 5.1 Enble firewall on Oracle Linux
+  systemd:
+    state: started
+    name: firewalld
+    enable: yes
+    masked: no
+  become: true
+  when: ansible_distribution == "OracleLinux"
+
+- name: 5.2 Open firewall on Oracle Linux
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -13,7 +22,19 @@
     - "{{ opendj_port_admin }}/tcp"
     - "{{ opendj_port_replica }}/tcp"
 
-- name: 5.2 Open firewall on Ubuntu
+- name: 5.3 Redirect ports 389 and 636 to {{ opendj_port_ldap }} and {{ opendj_port_ldaps }} with Rich Rule on Oracle Linux
+  firewalld:
+    rich_rule: "rule family=ipv4 forward-port port={{ item.from }} protocol=tcp to-port={{ item.to }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  become: true
+  when: ansible_distribution == "OracleLinux"
+  with_items:
+    - { from: '389', to: "{{ opendj_port_ldap }}" }
+    - { from: '636', to: "{{ opendj_port_ldaps }}" }
+
+- name: 5.4 Open firewall on Ubuntu
   ufw:
     rule: allow
     port: "{{ item }}"
@@ -21,26 +42,24 @@
   become: true
   when: ansible_distribution == "Ubuntu"
   with_items:
-    - "{{ opendj_port_ldap }}"
-    - "{{ opendj_port_ldaps }}"
     - "{{ opendj_port_admin }}"
     - "{{ opendj_port_replica }}"
+    - 389
+    - 636
+    - "{{ opendj_port_ldap }}"
+    - "{{ opendj_port_ldaps }}"
 
-- name: 5.3 Redirect port 389 to {{ opendj_port_ldap }} with Rich Rule
-  firewalld:
-    rich_rule: "rule family=ipv4 forward-port port=389 protocol=tcp to-port={{ opendj_port_ldap }}"
-    permanent: yes
-    immediate: yes
-    state: enabled
+- name: 5.5 Redirect ports 389 and 636 to {{ opendj_port_ldap }} and {{ opendj_port_ldaps }} with ufw on Ubuntu
+  ufw:
+    rule: allow
+    direction: in
+    proto: tcp
+    from_port: "{{ item.from }}"
+    to_port: "{{ item.to }}"
+    state: reloaded
   become: true
-  when: ansible_distribution == "OracleLinux"
-
-- name: 5.4 Redirect port 636 to {{ opendj_port_ldaps }} with Rich Rule
-  firewalld:
-    rich_rule: "rule family=ipv4 forward-port port=636 protocol=tcp to-port={{ opendj_port_ldaps }}"
-    permanent: yes
-    immediate: yes
-    state: enabled
-  become: true
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_distribution == "Ubuntu"
+  with_items:
+    - { from: "389", to: "{{ opendj_port_ldap }}" }
+    - { from: "636", to: "{{ opendj_port_ldaps }}" }
 
