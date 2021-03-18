@@ -2,6 +2,7 @@
 - name: 1.1 Add opendj user
   user:
     name: "{{ opendj_user }}"
+    comment: OpenDJ a LDAP daemon
   become: true
 
 - name: 1.2 mk Install temporary directory
