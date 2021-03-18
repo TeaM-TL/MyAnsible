@@ -3,9 +3,16 @@
   user:
     name: "{{ opendj_user }}"
     comment: OpenDJ a LDAP daemon
+    shell: "/bin/bash"
   become: true
 
-- name: 1.2 mk Install temporary directory
+- name: 1.2 Add OpenDJ into PATH in .bashrc
+  lineinfile:
+    path: "/home/{{ opendj_user }}"
+    line: "PATH={{ opendj_bin }}:$PATH"
+    create: yes
+
+- name: 1.3 mk Install temporary directory
   file:
     path: "{{ opendj_install }}"
     owner: "{{ opendj_user }}"
@@ -14,7 +21,7 @@
     state: directory
   become: true
 
-- name: 1.3 Install JDK on Ubuntu
+- name: 1.4 Install JDK on Ubuntu
   apt:
     name: "{{ item }}"
     state: present
@@ -24,7 +31,7 @@
   - openjdk-11-jre
   - openjdk-11-jre-headless
 
-- name: 1.3 Install JDK on Oracle Linux
+- name: 1.5 Install JDK on Oracle Linux
   yum:
     name: "{{ item }}"
     state: present
@@ -34,34 +41,34 @@
   - java-11-openjdk
   - java-11-openjdk-headless
 
-- name: 1.4 Download OpenDJ for Ubuntu
+- name: 1.6 Download OpenDJ for Ubuntu
   get_url:
     url: "{{ opendj_url_deb }}"
     dest: "{{ opendj_install }}/{{ opendj_package_deb }}"
   become: true
   when: ansible_distribution == "Ubuntu"
 
-- name: 1.4 Download OpenDJ for Oracle Linux
+- name: 1.7 Download OpenDJ for Oracle Linux
   get_url:
     url: "{{ opendj_url_rpm }}"
     dest: "{{ opendj_install }}/{{ opendj_package_rpm }}"
   become: true
   when: ansible_distribution == "OracleLinux"
 
-- name: 1.5 Install OpenDJ on Ubuntu
+- name: 1.8 Install OpenDJ on Ubuntu
   apt:
     deb: "{{ opendj_install }}/{{ opendj_package_deb }}"
   become: true
   when: ansible_distribution == "Ubuntu"
 
-- name: 1.5 Install OpenDJ on Oracle Linux
+- name: 1.9 Install OpenDJ on Oracle Linux
   yum:
     name: "{{ opendj_install }}/{{ opendj_package_rpm }}"
     state: present
   become: true
   when: ansible_distribution == "OracleLinux"
 
-- name: 1.6 Copy OpenDJ start script and update path
+- name: 1.10 Copy OpenDJ start script and reload daemons
   template:
     src: opendj.j2
     dest: /etc/init.d/opendj
