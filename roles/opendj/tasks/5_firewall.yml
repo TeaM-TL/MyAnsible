@@ -56,6 +56,7 @@
     proto: tcp
     from_port: "{{ item.from }}"
     to_port: "{{ item.to }}"
+    to_ip: 127.0.0.1
     state: reloaded
   become: true
   when: ansible_distribution == "Ubuntu"

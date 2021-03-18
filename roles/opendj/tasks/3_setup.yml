@@ -18,3 +18,14 @@
            --no-prompt"
   become: true
 
+- name: 3.2 My own schema extensions
+  copy:
+    src: "{{ item }}"
+    dest: "{{ opendj_config }}/schema/{{ item }}"
+    owner: "{{ opendj_user }}"
+    group: "{{ opendj_group }}"
+    mode: '0644'
+  become: true
+  with_items:
+    - 99-user.ldif
+
