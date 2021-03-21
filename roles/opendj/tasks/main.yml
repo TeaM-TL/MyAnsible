@@ -11,8 +11,11 @@
 - name: Setup keystores
   import_tasks: 4_keystores.yml
 
-- name: Firewall
-  import_tasks: 5_firewall.yml
+- name: Firewalld
+  import_tasks: 5_firewalld.yml
+
+#- name: Firewall UFW
+#  import_tasks: 5_ufw.yml
 
 - name: Setup logs and TLS
   import_tasks: 6_logs_tls.yml
