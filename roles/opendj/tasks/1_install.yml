@@ -24,23 +24,17 @@
 
 - name: 1.4 Install JDK on Ubuntu
   apt:
-    name: "{{ item }}"
+    name: ['openjdk-11-jre', 'openjdk-11-jre-headless']
     state: present
   become: true
   when: ansible_distribution == "Ubuntu"
-  with_items:
-  - openjdk-11-jre
-  - openjdk-11-jre-headless
 
 - name: 1.5 Install JDK on Oracle Linux
   yum:
-    name: "{{ item }}"
+    name: ['java-11-openjdk', 'java-11-openjdk-headless']
     state: present
   become: true
   when: ansible_distribution == "OracleLinux"
-  with_items:
-  - java-11-openjdk
-  - java-11-openjdk-headless
 
 - name: 1.6 Download OpenDJ for Ubuntu
   get_url:

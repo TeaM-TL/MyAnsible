@@ -1,6 +1,7 @@
 ---
 - name: Install replication between OpenDJ LDAP server
   #connection: local
+  serial: true
   hosts: LDAP
   gather_facts: true
   roles:
