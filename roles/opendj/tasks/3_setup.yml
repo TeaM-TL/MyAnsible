@@ -17,8 +17,27 @@
            --doNotStart
            --no-prompt"
   become: true
+  when: opendj_selfsign == false
 
-- name: 3.2 My own schema extensions
+- name: 3.2 OpenDJ setup
+  command: su - {{ opendj_user }} -c "{{ opendj_root }}/setup
+           --cli
+           --baseDN {{ opendj_context }}
+           --addBaseEntry
+           --ldapPort {{ opendj_port_ldap }}
+           --adminConnectorPort {{ opendj_port_admin }}
+           --rootUserDN 'cn=Directory Manager'
+           --rootUserPasswordFile {{ opendj_dm_password_file }}
+           --ldapsPort {{ opendj_port_ldaps }}
+           --generateSelfSignedCertificate
+           --hostName {{ ansible_fqdn }}
+           --noPropertiesFile
+           --doNotStart
+           --no-prompt"
+  become: true
+  when: opendj_selfsign == true
+
+- name: 3.3 My own schema extensions
   copy:
     src: "{{ item }}"
     dest: "{{ opendj_config }}/schema/{{ item }}"
