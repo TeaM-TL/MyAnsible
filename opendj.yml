@@ -1,5 +1,6 @@
 ---
 - name: Install OpenDJ a LDAP server
+  serial: false
   #connection: local
   hosts: LDAP
   gather_facts: true
