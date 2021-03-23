@@ -1,8 +1,0 @@
----
-# Replication parameters
-opendj_replica_hostname: ldap167.team-tl.intranet
-opendj_replica_dm_password: "P@S5w0rd"
-opendj_replica_dm_password_file: "/home/{{ opendj_user }}/.pwddm"
-opendj_replica_admin_password: "P@S5w0rd"
-opendj_replica_admin_password_file: "/home/{{ opendj_user }}/.pwdadm"
-

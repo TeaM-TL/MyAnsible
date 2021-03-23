@@ -1,5 +1,6 @@
 ---
 - name: Upgrade OpenDJ LDAP server
+  serial: true
   #connection: local
   hosts: LDAP
   gather_facts: true
