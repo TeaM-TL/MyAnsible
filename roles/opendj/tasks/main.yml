@@ -20,6 +20,9 @@
 - name: Setup logs and TLS
   import_tasks: 6_logs_tls.yml
 
-- name: Cleanup
-  import_tasks: cleanup.yml
+- name: Other settings
+  import_tasks: 7_other.yml
+
+  #- name: Cleanup
+  #import_tasks: cleanup.yml
 
