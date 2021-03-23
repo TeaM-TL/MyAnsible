@@ -1,6 +1,6 @@
 ---
 - name: 3.1 OpenDJ setup
-  command: su - {{ opendj_user }} -c "{{ opendj_root }}/setup
+  command: "{{ opendj_root }}/setup
            --cli
            --baseDN {{ opendj_context }}
            --addBaseEntry
@@ -17,10 +17,11 @@
            --doNotStart
            --no-prompt"
   become: true
+  become_user: "{{ opendj_user }}"
   when: opendj_selfsign == false
 
 - name: 3.2 OpenDJ setup
-  command: su - {{ opendj_user }} -c "{{ opendj_root }}/setup
+  command: "{{ opendj_root }}/setup
            --cli
            --baseDN {{ opendj_context }}
            --addBaseEntry
@@ -35,6 +36,7 @@
            --doNotStart
            --no-prompt"
   become: true
+  become_user: "{{ opendj_user }}"
   when: opendj_selfsign == true
 
 - name: 3.3 My own schema extensions

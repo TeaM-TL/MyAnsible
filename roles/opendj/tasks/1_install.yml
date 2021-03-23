@@ -5,6 +5,7 @@
     comment: OpenDJ a LDAP daemon
     shell: "/bin/bash"
   become: true
+  when: opendj_user != "root"
 
 - name: 1.2 Add OpenDJ into PATH in .bashrc
   lineinfile:
@@ -57,5 +58,9 @@
     owner: root
     group: root
   become: true
-  notify: "systemd reload daemon"
+
+- name: 1.9 Systemd daemon reload
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  become: true
 

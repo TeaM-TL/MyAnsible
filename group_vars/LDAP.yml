@@ -24,7 +24,7 @@ opendj_group: "opendj"
 opendj_dm_password_file: "/home/{{ opendj_user }}/.pwd"
 
 ## common part for dsconfig command
-dsconfig_common: "--bindDN 'cn=Directory Manager' --port 4444 --bindPasswordFile {{ opendj_dm_password_file }} --trustAll --no-prompt"
+opendj_dsconfig: "--bindDN 'cn=Directory Manager' --port 4444 --bindPasswordFile {{ opendj_dm_password_file }} --trustAll --no-prompt"
 
 # Packages
 opendj_version: "4.4.10"
