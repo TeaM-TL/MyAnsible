@@ -7,6 +7,7 @@
     mode: '0750'
     state: directory
   become: true
+  when: opendj_selfsign == false
 
 - name: 2.2 Unzip keystores
   unarchive:
@@ -15,6 +16,7 @@
     owner: "{{ opendj_user }}"
     group: "{{ opendj_group }}"
   become: true
+  when: opendj_selfsign == false
 
 - name: 2.3 OpenDJ directory ownership
   file:
