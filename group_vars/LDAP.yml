@@ -1,5 +1,8 @@
 ---
 # ------------------ OpenDJ --------------------
+## Selfsign or signed certificates
+opendj_selfsign: false
+
 ## Install temporary directory
 opendj_install: "/tmp/opendj_install"
 
