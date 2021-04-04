@@ -1,0 +1,11 @@
+---
+version: '0.6.2'
+
+duf_url: "https://github.com/muesli/duf/releases/download/v{{ version }}"
+duf_package_deb: "duf_{{ version }}_linux_amd64.deb"
+duf_package_rpm: "duf_{{ version }}_linux_amd64.deb"
+duf_url_deb: "{{ duf_url }}/{{ duf_package_deb }}"
+duf_url_rpm: "{{ duf_url }}/{{ duf_package_rpm }}"
+
+duf_install: /tmp
+

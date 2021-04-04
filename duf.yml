@@ -1,0 +1,9 @@
+---
+- name: Install DUF - Disk Usage/Free Utility - a better df alternative
+  serial: false
+  #connection: local
+  hosts: all
+  gather_facts: true
+  roles:
+  - role: duf
+

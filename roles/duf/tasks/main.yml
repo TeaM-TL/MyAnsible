@@ -1,0 +1,29 @@
+---
+- name: 1 Download DUF for Ubuntu
+  get_url:
+    url: "{{ duf_url_deb }}"
+    dest: "{{ duf_install }}/{{ duf_package_deb }}"
+  become: true
+  when: ansible_distribution == "Ubuntu"
+
+- name: 2 Download DUF for Oracle Linux
+  get_url:
+    url: "{{ duf_url_rpm }}"
+    dest: "{{ duf_install }}/{{ duf_package_rpm }}"
+  become: true
+  when: ansible_distribution == "OracleLinux"
+
+- name: 3 Install DUF on Ubuntu
+  apt:
+    deb: "{{ duf_install }}/{{ duf_package_deb }}"
+    state: present
+  become: true
+  when: ansible_distribution == "Ubuntu"
+
+- name: 4 Install DUF on Oracle Linux
+  yum:
+    name: "{{ duf_install }}/{{ duf_package_rpm }}"
+    state: present
+  become: true
+  when: ansible_distribution == "OracleLinux"
+

@@ -12,6 +12,9 @@ My ansible roles and playbooks
 - dnsmasq_dns - as DNS
 - dnsmasq_dhcp - as DHCPd
 
+### DUF - Disk Usage/Free Utility - a better 'df' alternative
+- duf - download and install
+
 ### EasyRSA - own PKI CA
 - pki_easyrsa - only installation, without *init-pki* or *build-ca*
 
