@@ -1,17 +1,17 @@
 ---
+- name: 1 Install Cockpit Ubuntu
+  apt:
+    name: cockpit-ws
+    state: present
+  when: ansible_os_family == "Debian"
+  notify: "restart cockpit daemon"
+
 - name: 1 Install Cockpit OracleLinux
   yum:
     name: cockpit-ws
     state: present
   become: true
-  when: ansible_distribution == "OracleLinux"
-  notify: "restart cockpit daemon"
-
-- name: 1 Install Cockpit Ubuntu
-  apt:
-    name: cockpit-ws
-    state: present
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "RedHat"
   notify: "restart cockpit daemon"
 
 - name: 2 Remove old certificates

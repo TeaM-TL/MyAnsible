@@ -13,14 +13,14 @@
     url: "{{ opendj_url_deb }}"
     dest: "{{ opendj_install }}/{{ opendj_package_deb }}"
   become: true
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
 
 - name: 1.2 Download OpenDJ for Oracle Linux
   get_url:
     url: "{{ opendj_url_rpm }}"
     dest: "{{ opendj_install }}/{{ opendj_package_rpm }}"
   become: true
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_os_family == "RedHat"
 
 - name: 1.5 Stop OpenDJ
   command: su -  {{ opendj_user }} -c "{{ opendj_bin }}/stop-ds"
@@ -30,14 +30,14 @@
   apt:
     deb: "{{ opendj_install }}/{{ opendj_package_deb }}"
   become: true
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
 
 - name: 1.3 Upgrade OpenDJ on Oracle Linux
   yum:
     name: "{{ opendj_install }}/{{ opendj_package_rpm }}"
     state: present
   become: true
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_os_family == "RedHat"
 
 - name: 1.4 Copy OpenDJ start script and update path
   template:

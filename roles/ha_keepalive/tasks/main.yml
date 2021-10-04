@@ -4,14 +4,14 @@
     name: keepalived
     state: present
   become: true
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
 
 - name: 1.1 Install keepalived on Oracle Linux
   yum:
     name: keepalived
     state: present
   become: true
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_os_family == "RedHat"
 
 - name: 1.2  set ip_nonlocal_bind in sysctl.conf
   shell: echo "net.ipv4.ip_nonlocal_bind=1" >> /etc/sysctl.conf
@@ -35,14 +35,14 @@
     rule: allow
     src: 224.0.0.18
   become: true
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
 
 - name: 1.5.2 Open port 112 in firewall in Ubuntu
   ufw:
     rule: allow
     dest: 224.0.0.18
   become: true
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
 
 - name: 1.5 Open port 112 in firewall in OracleLinux
   firewalld:
@@ -51,7 +51,7 @@
     immediate: yes
     state: enabled
   become: true
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_os_family == "RedHat"
 
 - name: 1.6 Enable and start keepalive
   systemd:

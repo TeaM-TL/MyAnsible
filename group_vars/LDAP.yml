@@ -10,7 +10,8 @@ opendj_install: "/tmp/opendj_install"
 opendj_dm_password: "P@S5w0rd"
 
 ## OpenDJ install parameters
-opendj_root: "/opt/opendj"
+opendj_opt: "/opt"
+opendj_root: "{{ opendj_opt }}/opendj"
 opendj_bin: "{{ opendj_root }}/bin"
 opendj_config: "{{ opendj_root }}/config"
 opendj_logs: "{{ opendj_root }}/logs"
@@ -27,14 +28,11 @@ opendj_dm_password_file: "/home/{{ opendj_user }}/.pwd"
 opendj_dsconfig: "--bindDN 'cn=Directory Manager' --port 4444 --bindPasswordFile {{ opendj_dm_password_file }} --trustAll --no-prompt"
 
 # Packages
-opendj_version: "4.4.10"
-opendj_package_deb: "opendj_{{ opendj_version }}-1_all.deb"
-opendj_package_rpm: "opendj-{{ opendj_version }}-1.noarch.rpm"
+opendj_version: "4.4.11"
 opendj_package_zip: "opendj-{{ opendj_version }}.zip"
 opendj_url: "https://github.com/OpenIdentityPlatform/OpenDJ/releases/download/{{ opendj_version }}"
-opendj_url_deb: "{{ opendj_url }}/{{ opendj_package_deb }}"
-opendj_url_rpm: "{{ opendj_url }}/{{ opendj_package_rpm }}"
 opendj_url_zip: "{{ opendj_url }}/{{ opendj_package_zip }}"
+opendj_openjdk: "openjdk-11-jdk"
 
 # Replication parameters
 opendj_replica_hostname: ldap167.team-tl.intranet

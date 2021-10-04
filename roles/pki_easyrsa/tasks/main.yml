@@ -13,7 +13,7 @@
     url: "{{ easyrsa_url }}"
     dest: "/tmp/{{ easyrsa_tgz }}"
   become: true
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_os_family == "RedHat"
 
 - name: 2.2 Unpack EasyRSA.tgz on Oracle Linux
   unarchive:
@@ -24,14 +24,14 @@
     remote_src: true
     extra_opts: --strip-components=1
   become: true
-  when: ansible_distribution == "OracleLinux"
+  when: ansible_os_family == "RedHat"
 
 - name: 2 Install on Ubuntu
   apt:
     name: easy-rsa
     state: present
   become: true
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
 
 - name: 3 Copy default variables
   template:
