@@ -1,0 +1,11 @@
+---
+- name: 2.1 install haproxy
+  apt:
+    -name: haproxy
+
+- name: 2.2 copy config
+  copy:
+
+- name: 2.3 restart haproxy service
+
+
