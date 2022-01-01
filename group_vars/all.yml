@@ -1,0 +1,14 @@
+---
+packages_common:
+  - cockpit
+  - cockpit-ws
+  - cockpit-system
+  - cockpit-storaged
+  - cockpit-packagekit
+  - cockpit-networkmanager
+  - tmux
+  - tree
+  - vim
+  - zabbix-agent
+
+time_server: "192.168.0.163"

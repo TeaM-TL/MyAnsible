@@ -1,3 +1,5 @@
-*.zip
-*.pem
 *.crt
+*.cert
+*.key
+*.pem
+*.zip

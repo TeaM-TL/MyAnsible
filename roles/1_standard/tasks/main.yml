@@ -1,0 +1,16 @@
+---
+#- name: standard
+#  import_tasks: 1_minimum.yml
+
+#- name: networkManager instead netplan
+#  import_tasks: 2_networkmanager.yml
+
+#- name: duf
+#  import_tasks: 3_duf.yml
+
+#- name: chrony
+#  import_tasks: 4_ntp2chrony.yaml
+
+#- name: autoremove and autoclean
+#  import_tasks: 9_remove_pkg.yml
+

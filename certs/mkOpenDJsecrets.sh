@@ -2,10 +2,10 @@
 
 IP=192.168.0.167
 CERT=ldap167
-PIN=M@ory51A
+PIN=topSecretKeyForKeystore
 
 FULL=$CERT.team-tl.intranet
-SAN="DNS:$FULL,DNS:$CERT,DNS:localhost,IP:$IP,IP:127.0.0.1"
+SAN="DNS:$FULL,DNS:$CERT"
 
 CA=/etc/CA
 

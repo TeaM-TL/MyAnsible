@@ -1,0 +1,30 @@
+" ------------------------------
+" --- Zachowanie i wyświetlanie
+set nocompatible                " tryb rozszerzony Vima
+syntax on                       " kolorowanie składni
+set number                      " numerowanie wierszy
+set scrolloff=3                 " przy przewijaniu zachowaj trzy wiersze
+set laststatus=2                " wiersz statusu
+set cursorline                  " podkreśla wiersz z kursorem
+set showmatch                   " paruje nawiasy i krótki skok
+set incsearch                   " podświetla przy wpisywaniu poszukiwanego tekstu
+set hlsearch                    " podświetla wyszukane
+set listchars=tab:▸-,trail:·    " białe znaki na końcu wiersza
+set list                        " wyświetlanie białych znakow
+set gfn=Monospace\ 12           " font dla gVim
+set mouse=a                     " pełna obsługa myszki w terminalu
+
+" ------------------------------
+" --- Tabulatory i wcięcia -----
+set tabstop=4                   " skok tabulatora - 4 spacje
+set shiftwidth=4                " wcięcie - 4 spacje
+set autoindent                  " automatyczne wcięcie
+set expandtab                   " zamiana tabulatora na spacje
+
+" ------------------------------
+" --- Długie wiersze -----------
+"set textwidth=79                " maksymalna liczba znaków w wierszu
+set linebreak                   " przełamywanie wierszy na spacjach
+set wrap                        " zawijanie długich wierszy
+set ff=unix                     " uniksowy znak końca wiersza
+

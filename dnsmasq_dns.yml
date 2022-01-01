@@ -1,7 +1,0 @@
----
-- name: Install dnsmasq as DNS
-  hosts: DNS
-  gather_facts: true
-  roles:
-  - role: dnsmasq_dns
-

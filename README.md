@@ -1,5 +1,13 @@
 # MyAnsible
-My ansible roles and playbooks
+My ansible roles
+
+---
+## Idea
+- 1\* - common tasks for every my server
+- 5\* - tasks for bare METAL servers
+- 6\* - tasks for LAMP servers
+- 7\* - tasks for LDAP servers
+- 8\* - tasks for PKI/CA server
 
 ---
 

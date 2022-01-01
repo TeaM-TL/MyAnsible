@@ -1,0 +1,8 @@
+---
+- name: 7.1 ban anonymous bind to LDAP
+  command: "{{ opendj_bin }}/dsconfig
+            set-access-control-handler-prop
+             --remove 'global-aci:(targetattr!=\"userPassword||authPassword||debugsearchindex||changes||changeNumber||changeType||changeTime||targetDN||newRDN||newSuperior||deleteOldRDN\")(version 3.0; acl \"Anonymous read access\"; allow (read,search,compare) userdn=\"ldap:///anyone\";)'
+        {{ opendj_dsconfig }}"
+  become: true
+

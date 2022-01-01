@@ -1,0 +1,8 @@
+---
+- name: restart daemon
+  ansible.builtin.systemd:
+    name: cockpit
+    state: restarted
+    enabled: true
+  listen: restart cockpit daemon
+

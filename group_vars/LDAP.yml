@@ -1,4 +1,8 @@
 ---
+packages_specific:
+  - haproxy
+  - openjdk-11-jre-headless
+
 # ------------------ OpenDJ --------------------
 ## Selfsign or signed certificates
 opendj_selfsign: false
@@ -43,7 +47,7 @@ opendj_replica_admin_password_file: "/home/{{ opendj_user }}/.pwdadm"
 
 # ------------------ HA Keepalived ------------------------
 keepalive_trackname: "track_opendj"
-keepalive_process: "java"
+keepalive_process: "haproxy"
 keepalive_id: 197
 keepalive_advert: '1'
 keepalive_password: "p@S5f0rD"

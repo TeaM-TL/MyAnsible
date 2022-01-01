@@ -1,7 +1,0 @@
----
-- name: Install keepalive and virtual IP for OpenDJ LDAP servers
-  hosts: LDAP
-  gather_facts: true
-  roles:
-  - role: ha_keepalive
-

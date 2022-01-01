@@ -1,0 +1,53 @@
+---
+- name: 1.1 copy configs
+  copy:
+    src: "{{ item.src}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: "apt_zabbix", dest: "/etc/apt/sources.list.d/zabbix.list", owner: "root", group: "root", mode: "644" }
+    - { src: "vimrc",  dest: "/etc/skel/.vimrc", owner: "root", group: "root", mode: "644" }
+    - { src: "vimrc",  dest: "/root/.vimrc",     owner: "root", group: "root", mode: "644" }
+    - { src: "vimrc",  dest: "/home/tlu/.vimrc", owner: "tlu",  group: "tlu",  mode: "644" }
+    - { src: "ca.crt", dest: "/usr/local/share/ca-certificates/ca.crt", owner: "root", group: "root", mode: "644" }
+
+- name: 1.2 update CA certs
+  command: update-ca-certificates
+
+- name: 1.3 apt update
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400 # one day
+
+- name: 1.3 install required common packages
+  apt:
+    name: "{{ packages_common }}"
+    state: present
+
+- name: 1.4 install required specific packages
+  apt:
+    name: "{{ packages_specific }}"
+    state: present
+
+- name: 1.5 Remove old certificates of Cockpit
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/etc/cockpit/ws-certs.d/0-self-signed-ca.pem"
+    - "/etc/cockpit/ws-certs.d/0-self-signed.cert"
+
+- name: 1.6 Copy certificates for Cockpit
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/cockpit/ws-certs.d/{{ item }}"
+    mode: '0644'
+    owner: root
+    group: cockpit-ws
+  notify: "restart cockpit daemon"
+  with_items:
+    - "{{ ansible_hostname }}.cert"
+
+

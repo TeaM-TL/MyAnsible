@@ -1,9 +1,0 @@
----
-- name: restart daemon
-  service:
-    name: cockpit
-    state: restarted
-    enabled: true
-  listen: restart cockpit daemon
-  become: true
-

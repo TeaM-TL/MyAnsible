@@ -1,0 +1,2 @@
+deb https://repo.zabbix.com/zabbix/5.4/ubuntu focal main
+deb-src https://repo.zabbix.com/zabbix/5.4/ubuntu focal main

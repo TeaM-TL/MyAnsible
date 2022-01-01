@@ -1,7 +1,0 @@
----
-- name: Install Cockpit and certificates
-  hosts: all
-  gather_facts: true
-  roles:
-  - role: cockpit
-

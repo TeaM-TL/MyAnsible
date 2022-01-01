@@ -1,0 +1,34 @@
+---
+# NetworkManager instead netplan
+- name: 2.1 New netplan config
+  copy:
+    src: "{{ src }}"
+    dest: "{{ dest }}"
+    backup: true
+  vars:
+    file: 01-netcfg.yaml
+    src: "etc_netplan_{{ file }}"
+    dest: "/etc/netplan/{{ file }}"
+
+- name: 2.2 netplan generate for NM
+  command: netplan generate
+
+- name: 2.3 netplan apply
+  command: netplan apply
+
+- name: 2.4 restart network manager
+  ansible.builtin.systemd:
+    name: network-manager
+    state: restarted
+    enabled: true
+
+- name: 2.5 add correct DNSs
+  community.general.nmcli:
+      conn_name: "{{ ansible_default_ipv4.alias }}"
+      type: ethernet
+      dns4:
+      - 192.168.0.163
+      - 192.168.0.171
+      state: present
+      autoconnect: yes
+

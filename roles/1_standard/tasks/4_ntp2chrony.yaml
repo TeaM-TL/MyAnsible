@@ -1,0 +1,32 @@
+---
+- name: 4.1 Set timezone to Europe/Warsaw
+  timezone:
+    name: Europe/Warsaw
+
+- name: 4.2 Uninstall ntp
+  apt:
+    pkg: ntp
+    state: absent
+    purge: yes
+
+- name: 4.3 Install chrony
+  apt:
+    pkg: chrony
+    state: present
+    update_cache: yes
+    cache_valid_time: 86400 # one day
+
+- name: 4.4 Install chrony.conf
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: 4.5 Ensure chronyd is restarted
+  service:
+    name: chrony
+    state: restarted
+
+# EOF
