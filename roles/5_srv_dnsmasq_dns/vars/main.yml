@@ -1,8 +1,0 @@
----
-# DNS
-dnsmasq_cachesize: '5000'
-dnsmasq_dns1: "8.8.8.8"
-dnsmasq_dns2: "8.8.4.4"
-dnsmasq_local: "/team-tl.intranet/"
-dnsmasq_address: "/nasza-klasa.pl/127.0.0.1"
-

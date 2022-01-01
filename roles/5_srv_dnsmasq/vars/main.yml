@@ -6,3 +6,11 @@ dnsmasq_router: "192.168.2.1"
 dnsmasq_ntp: "192.168.2.163"
 dnsmasq_dns: "192.168.2.100"
 dnsmasq_mask: "255.255.255.0"
+  #
+# DNS
+dnsmasq_cachesize: '5000'
+dnsmasq_dns1: "8.8.8.8"
+dnsmasq_dns2: "8.8.4.4"
+dnsmasq_local: "/team-tl.intranet/"
+dnsmasq_address: "/nasza-klasa.pl/127.0.0.1"
+
