@@ -3,7 +3,7 @@ defaults
 
 {% if host_type == "ldap" %}
 frontend ldaps
-    bind                *:636 ssl ca-file /etc/pki/{{ansible_hostname}}.pem
+    bind                *:636 ssl crt /etc/pki/{{ansible_hostname}}.pem
     mode                tcp
     option              tcplog
     timeout client      1800s
