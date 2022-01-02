@@ -1,25 +1,13 @@
 ---
-- name: 1 Download DUF for Ubuntu
-  get_url:
-    url: "{{ duf_url_deb }}"
-    dest: "{{ duf_install }}/{{ duf_package_deb }}"
-  when: ansible_os_family == "Debian"
-
-- name: 2 Download DUF for Oracle Linux
-  get_url:
-    url: "{{ duf_url_rpm }}"
-    dest: "{{ duf_install }}/{{ duf_package_rpm }}"
-  when: ansible_os_family == "RedHat"
-
-- name: 3 Install DUF on Ubuntu
+- name: 3.1 Install DUF on Ubuntu
   apt:
-    deb: "{{ duf_install }}/{{ duf_package_deb }}"
+    deb: "{{ duf_url_deb }}"
     state: present
   when: ansible_os_family == "Debian"
 
-- name: 4 Install DUF on Oracle Linux
+- name: 3.2 Install DUF on Oracle Linux
   yum:
-    name: "{{ duf_install }}/{{ duf_package_rpm }}"
+    rpm: "{{ duf_url_rpm }}"
     state: present
   when: ansible_os_family == "RedHat"
 
