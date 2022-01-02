@@ -1,6 +1,5 @@
 ---
 packages_specific:
-  - haproxy
   - openjdk-11-jre-headless
 
 # ------------------ OpenDJ --------------------

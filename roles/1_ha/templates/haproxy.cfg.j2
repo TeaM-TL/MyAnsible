@@ -1,0 +1,49 @@
+defaults
+    mode                tcp
+
+{% if host_type == ldap %}
+frontend ldaps
+    bind                *:636 ssl ca-file /pki/cacerts.pem
+    mode                tcp
+    option              tcplog
+    timeout client      1800s
+    default_backend     ldaps_servers
+
+backend ldaps_servers
+    mode                tcp
+    balance             roundrobin
+    # for ldap
+    # option            ldap-check
+    # for ldaps
+    option              ssl-hello-chk
+    timeout server      1800s
+    server              ldap1 192.168.0.167:636 ssl ca-file /pki/cacerts.pem check
+    server              ldap2 192.168.0.177:636 ssl ca-file /pki/cacerts.pem check
+
+frontend ldap
+    bind                *:389
+    mode                tcp
+    option              tcplog
+    timeout client      1800s
+    default_backend     ldap_servers
+
+backend ldap_servers
+    mode                tcp
+    balance             roundrobin
+    # for ldap
+    # option            ldap-check
+    # for ldaps
+    option              ldap-chk
+    timeout server      1800s
+    server              ldap1 192.168.0.167:389
+    server              ldap2 192.168.0.177:389
+{% endif %}
+
+frontend http
+backend http_servers
+
+frontend https
+backend https_servers
+
+{% if host_type == ldap %}
+{% endif %}

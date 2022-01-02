@@ -1,8 +1,7 @@
 ---
 packages_specific:
   - apache2
-  - openjdk-11-jre-headless
-
+  - php
 
 # Replication parameters
 

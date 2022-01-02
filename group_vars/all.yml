@@ -6,6 +6,7 @@ packages_common:
   - cockpit-storaged
   - cockpit-packagekit
   - cockpit-networkmanager
+  - haproxy
   - tmux
   - tree
   - vim

@@ -1,11 +1,23 @@
 ---
 - name: 2.1 install haproxy
   apt:
-    -name: haproxy
+    name: haproxy
+    state: present
+  when: ansible_os_family == "Debian"
 
 - name: 2.2 copy config
-  copy:
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: '0644'
+    owner: root
+    group: root
+  become: true
 
 - name: 2.3 restart haproxy service
-
+  systemd:
+    name: haproxy
+    state: started
+    enabled: yes
+  become: true
 
