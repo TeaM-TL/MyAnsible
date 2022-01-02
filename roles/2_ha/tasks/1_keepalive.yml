@@ -25,20 +25,17 @@
     mode: '0644'
     owner: root
     group: root
-  become: true
 
 - name: 1.4.1 Open port 112 in firewall in Ubuntu
   ufw:
     rule: allow
     src: 224.0.0.18
-  become: true
   when: ansible_os_family == "Debian"
 
 - name: 1.4.2 Open port 112 in firewall in Ubuntu
   ufw:
     rule: allow
     dest: 224.0.0.18
-  become: true
   when: ansible_os_family == "Debian"
 
 - name: 1.4 Open port 112 in firewall in OracleLinux
@@ -47,7 +44,6 @@
     permanent: yes
     immediate: yes
     state: enabled
-  become: true
   when: ansible_os_family == "RedHat"
 
 - name: 1.5 Enable and start keepalive
@@ -55,5 +51,4 @@
     name: keepalived
     state: started
     enabled: yes
-  become: true
 

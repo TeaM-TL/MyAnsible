@@ -1,6 +1,6 @@
 ---
-#- name: standard
-#  import_tasks: 1_minimum.yml
+- name: standard
+  import_tasks: 1_minimum.yml
 
 #- name: networkManager instead netplan
 #  import_tasks: 2_networkmanager.yml

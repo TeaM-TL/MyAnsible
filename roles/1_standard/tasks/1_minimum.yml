@@ -11,7 +11,8 @@
     - { src: "vimrc",  dest: "/etc/skel/.vimrc", owner: "root", group: "root", mode: "644" }
     - { src: "vimrc",  dest: "/root/.vimrc",     owner: "root", group: "root", mode: "644" }
     - { src: "vimrc",  dest: "/home/tlu/.vimrc", owner: "tlu",  group: "tlu",  mode: "644" }
-    - { src: "ca.crt", dest: "/usr/local/share/ca-certificates/ca.crt", owner: "root", group: "root", mode: "644" }
+    - { src: "ca.pem", dest: "/usr/local/share/ca-certificates/ca.pem", owner: "root", group: "root", mode: "644" }
+    - { src: "{{ hostname }}.key", dest: "/etc/ssl/private/privkey.pem", owner: "root", group: "root", mode: "644" }
 
 - name: 1.2 update CA certs
   command: update-ca-certificates

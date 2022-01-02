@@ -12,12 +12,10 @@
     mode: '0644'
     owner: root
     group: root
-  become: true
 
 - name: 2.3 restart haproxy service
   systemd:
     name: haproxy
     state: started
     enabled: yes
-  become: true
 
