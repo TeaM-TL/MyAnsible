@@ -5,7 +5,7 @@ vrrp_track_process {{ keepalive_trackname }} {
 
 vrrp_instance VI_1 {
     state {{ keepalive_state }}
-    interface {{ keepalive_interface }}
+    interface {{ ansible_default_ipv4.alias }}
     virtual_router_id {{ keepalive_id }}
     priority {{ keepalive_priority }}
     advert_int {{ keepalive_advert }}

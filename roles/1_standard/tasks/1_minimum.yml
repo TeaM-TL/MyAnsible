@@ -8,17 +8,13 @@
     mode: "{{ item.mode }}"
   with_items:
     - { src: "apt_zabbix", dest: "/etc/apt/sources.list.d/zabbix.list", owner: "root", group: "root", mode: "644" }
-    - { src: "vimrc",  dest: "/etc/skel/.vimrc", owner: "root", group: "root", mode: "644" }
-    - { src: "vimrc",  dest: "/root/.vimrc",     owner: "root", group: "root", mode: "644" }
-    - { src: "vimrc",  dest: "/home/tlu/.vimrc", owner: "tlu",  group: "tlu",  mode: "644" }
-    - { src: "ca.pem", dest: "/usr/local/share/ca-certificates/ca.pem", owner: "root", group: "root", mode: "644" }
-    - { src: "{{ hostname }}.key", dest: "/etc/ssl/private/privkey.pem", owner: "root", group: "root", mode: "644" }
+    - { src: "vimrc",      dest: "/etc/skel/.vimrc",                    owner: "root", group: "root", mode: "644" }
+    - { src: "vimrc",      dest: "/root/.vimrc",                        owner: "root", group: "root", mode: "644" }
+    - { src: "vimrc",      dest: "/home/tlu/.vimrc",                    owner: "tlu",  group: "tlu",  mode: "644" }
 
-- name: 1.2 update CA certs
-  command: update-ca-certificates
-
-- name: 1.3 apt update
+- name: 1.2 apt update
   apt:
+    upgrade: yes
     update_cache: yes
     cache_valid_time: 86400 # one day
 
@@ -40,15 +36,29 @@
     - "/etc/cockpit/ws-certs.d/0-self-signed-ca.pem"
     - "/etc/cockpit/ws-certs.d/0-self-signed.cert"
 
-- name: 1.6 Copy certificates for Cockpit
+- name: 1.6 Copy certificates
   copy:
-    src: "{{ item }}"
-    dest: "/etc/cockpit/ws-certs.d/{{ item }}"
+    src: "{{ ansible_hostname }}.pem"
+    dest: "/etc/cockpit/ws-certs.d/{{ ansible_hostname }}.cert"
     mode: '0644'
     owner: root
-    group: cockpit-ws
   notify: "restart cockpit daemon"
+
+- name: 1.7 copy configs
+  copy:
+    src: "{{ item.src}}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: "{{ item.group }}"
+    mode: "0644"
   with_items:
-    - "{{ ansible_hostname }}.cert"
+    - { src: "ca.pem",                         dest: "/usr/local/share/ca-certificates/ca.crt",             group: "root" }
+    - { src: "{{ ansible_hostname }}.crt",     dest: "/etc/ssl/{{ ansible_hostname }}.crt",                 group: "root" }
+    - { src: "{{ ansible_hostname }}.pem",     dest: "/etc/ssl/{{ ansible_hostname }}.pem",                 group: "root" }
+    - { src: "{{ ansible_hostname }}.pem",     dest: "/etc/pki/{{ ansible_hostname }}.pem",                 group: "root" }
+    - { src: "ca.pem",                         dest: "/etc/pki/ca.pem",                                     group: "root" }
+    - { src: "{{ ansible_hostname }}-key.pem", dest: "/etc/ssl/private/privkey.pem",                        group: "root" }
+    - { src: "{{ ansible_hostname }}.pem",     dest: "/etc/cockpit/ws-certs.d/{{ ansible_hostname }}.cert", group: "cockpit-ws" }
 
-
+- name: 1.8 update CA certs
+  command: update-ca-certificates

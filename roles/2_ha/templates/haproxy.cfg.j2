@@ -1,9 +1,9 @@
 defaults
     mode                tcp
 
-{% if host_type == ldap %}
+{% if host_type == "ldap" %}
 frontend ldaps
-    bind                *:636 ssl ca-file /pki/cacerts.pem
+    bind                *:636 ssl ca-file /etc/pki/{{ansible_hostname}}.pem
     mode                tcp
     option              tcplog
     timeout client      1800s
@@ -12,13 +12,10 @@ frontend ldaps
 backend ldaps_servers
     mode                tcp
     balance             roundrobin
-    # for ldap
-    # option            ldap-check
-    # for ldaps
     option              ssl-hello-chk
     timeout server      1800s
-    server              ldap1 192.168.0.167:636 ssl ca-file /pki/cacerts.pem check
-    server              ldap2 192.168.0.177:636 ssl ca-file /pki/cacerts.pem check
+    server              ldap1 192.168.0.167:1636 ssl ca-file /etc/pki/ca.pem check
+    server              ldap2 192.168.0.177:1636 ssl ca-file /etc/pki/ca.pem check
 
 frontend ldap
     bind                *:389
@@ -30,13 +27,10 @@ frontend ldap
 backend ldap_servers
     mode                tcp
     balance             roundrobin
-    # for ldap
-    # option            ldap-check
-    # for ldaps
-    option              ldap-chk
+    option              ldap-check
     timeout server      1800s
-    server              ldap1 192.168.0.167:389
-    server              ldap2 192.168.0.177:389
+    server              ldap1 192.168.0.167:1389
+    server              ldap2 192.168.0.177:1389
 {% endif %}
 
 frontend http
@@ -45,5 +39,6 @@ backend http_servers
 frontend https
 backend https_servers
 
-{% if host_type == ldap %}
+{% if host_type == "ldap" %}
+#
 {% endif %}

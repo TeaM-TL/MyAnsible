@@ -1,6 +1,6 @@
 ---
-- name: keepalive
-  import_tasks: 1_keepalive.yml
+#- name: keepalive
+#  import_tasks: 1_keepalive.yml
 
 - name: haproxy
   import_tasks: 2_haproxy.yml
