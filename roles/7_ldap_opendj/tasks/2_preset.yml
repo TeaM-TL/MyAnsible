@@ -2,8 +2,8 @@
 - name: 2.1 mkdir certs
   file:
     path: "{{ opendj_root }}/certs"
-    owner: "{{ opendj_user }}"
-    group: "{{ opendj_group }}"
+    owner: root
+    group: root
     mode: '0750'
     state: directory
   become: true
@@ -13,16 +13,16 @@
   unarchive:
     src: "{{ ansible_hostname }}.zip"
     dest: "{{ opendj_root }}/certs"
-    owner: "{{ opendj_user }}"
-    group: "{{ opendj_group }}"
+    owner: root
+    group: root
   become: true
   when: opendj_selfsign == false
 
 - name: 2.3 OpenDJ directory ownership
   file:
     path: "{{ opendj_root }}"
-    owner: "{{ opendj_user }}"
-    group: "{{ opendj_group }}"
+    owner: root
+    group: root
     recurse: true
   become: true
 
@@ -30,8 +30,8 @@
   copy:
     content: "{{ opendj_dm_password }}"
     dest: "{{ opendj_dm_password_file }}"
-    owner: "{{ opendj_user }}"
-    group: "{{ opendj_group }}"
+    owner: root
+    group: root
     mode: '0600'
   become: true
 

@@ -5,7 +5,7 @@
   become: true
   gather_facts: true
   roles:
-    - 1_standard
-    - 2_ha
-      #    - 6_lamp
-      #    - 7_ldap
+    #    - 1_standard
+    #    - 2_ha
+    #    - 6_lamp
+    - 7_ldap_opendj

@@ -12,8 +12,12 @@
     mode: '0644'
     owner: root
     group: root
+    backup: true
 
-- name: 2.3 restart haproxy service
+- name: 2.3 DH2048
+  command: openssl dhparam -out /etc/haproxy/dhparams.pem 2048
+
+- name: 2.4 restart haproxy service
   systemd:
     name: haproxy
     state: started

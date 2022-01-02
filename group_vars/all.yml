@@ -10,6 +10,7 @@ packages_common:
   - ldap-utils
   - tmux
   - tree
+  - unzip
   - vim
   - zabbix-agent
 

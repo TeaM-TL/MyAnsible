@@ -6,8 +6,6 @@
         --set log-file:{{ opendj_logs }}/{{ item.filename }}
         --set enabled:{{ item.set }}
         {{ opendj_dsconfig }}"
-  become: true
-  become_user: "{{ opendj_user }}"
   with_items:
   - { name: "File-Based Access Logger",           filename: "access",      set: true }
   - { name: "File-Based Audit Logger",            filename: "audit",       set: true }
@@ -22,8 +20,6 @@
         --set log-directory:{{ opendj_logs }}/{{ item.dir }}
         --set enabled:{{ item.set }}
         {{ opendj_dsconfig }}"
-  become: true
-  become_user: "{{ opendj_user }}"
   with_items:
   - { name: "Json File-Based Access Logger",      dir: "access",      set: false }
   - { name: "Json File-Based HTTP Access Logger", dir: "access",      set: false }
@@ -34,14 +30,10 @@
         --handler-name 'LDAPS Connection Handler'
         --set ssl-protocol:TLSv1.2
         {{ opendj_dsconfig }}"
-  become: true
-  become_user: "{{ opendj_user }}"
 
 - name: 6.5 Set TLSv1.2 for administration connection port 4444
   command: "{{ opendj_bin }}/dsconfig
         set-administration-connector-prop
         --set ssl-protocol:TLSv1.2
         {{ opendj_dsconfig }}"
-  become: true
-  become_user: "{{ opendj_user }}"
 

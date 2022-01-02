@@ -16,8 +16,6 @@
            --noPropertiesFile
            --doNotStart
            --no-prompt"
-  become: true
-  become_user: "{{ opendj_user }}"
   when: opendj_selfsign == false
 
 - name: 3.2 OpenDJ setup
@@ -35,18 +33,15 @@
            --noPropertiesFile
            --doNotStart
            --no-prompt"
-  become: true
-  become_user: "{{ opendj_user }}"
   when: opendj_selfsign == true
 
 - name: 3.3 My own schema extensions
   copy:
     src: "{{ item }}"
     dest: "{{ opendj_config }}/schema/{{ item }}"
-    owner: "{{ opendj_user }}"
-    group: "{{ opendj_group }}"
+    owner: root
+    group: root
     mode: '0644'
-  become: true
   with_items:
     - 99-user.ldif
 
