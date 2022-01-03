@@ -27,12 +27,17 @@
 #  with_items:
 #    - 
 
-#- name: create site dirs
-#  file:
-#    path: {{item}}
-#    state: diretory
+- name: 5 remove defaut index.html
+  file:
+    path: /var/www/html/index.html
+    state: absent
 
-#- name: copy an index.html
+- name: 6 copy defaut web content
+  ansible.builtin.unarchive:
+    src: web.tar.gz
+    dest: /var/www/html
+
+
 #  template:
 #    src: index.html.j2
 #    dest: {{apache_docroot}}/index.html

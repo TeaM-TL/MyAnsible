@@ -1,5 +1,7 @@
 *.crt
 *.cert
+*.gz
 *.key
 *.pem
+*.tar
 *.zip
