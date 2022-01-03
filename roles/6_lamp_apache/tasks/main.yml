@@ -1,9 +1,8 @@
 ---
-- name: 1 install Apache2
+- name: 1 install Apache2, php etc.
   apt:
-    name: apache2
+    name: "{{ packages }}"
     state: present
-  when: ansible_os_family == "Debian"
 
 - name: 2 new file ports.conf
   copy:
@@ -17,6 +16,16 @@
     regexp: '<VirtualHost \*:80>'
     line: '<VirtualHost *:8080>'
     backup: true
+
+#- name: 4 enable apache mods
+#  ansible.builtin.file:
+#    src: "{{ item.src }}"
+#    dest: "{{ item.dest }}"
+#    owner: foo
+#    group: foo
+#    state: link
+#  with_items:
+#    - 
 
 #- name: create site dirs
 #  file:

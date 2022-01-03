@@ -70,6 +70,7 @@ backend ldaps_servers
 # - WWW frontend ---------------------------------------
 frontend http
     bind                *:80
+    bind                *:443 ssl crt /etc/pki/{{ansible_hostname}}.pem
     mode                http
     option              httplog
     option              forwardfor

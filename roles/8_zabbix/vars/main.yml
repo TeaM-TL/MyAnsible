@@ -1,0 +1,8 @@
+---
+packages:
+  - zabbix-agent
+  - zabbix-apache-conf
+  - zabbix-frontend-php
+  - zabbix-server-mysql
+  - zabbix-release
+

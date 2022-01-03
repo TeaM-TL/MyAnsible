@@ -12,6 +12,5 @@ packages_common:
   - tree
   - unzip
   - vim
-  - zabbix-agent
 
 time_server: "192.168.0.163"
