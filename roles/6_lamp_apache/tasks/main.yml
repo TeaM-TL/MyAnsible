@@ -1,29 +1,43 @@
 ---
-- name: install apache
-  yum:
-    name: httpd
+- name: 1 install Apache2
+  apt:
+    name: apache2
     state: present
+  when: ansible_os_family == "Debian"
 
-- name: create site dirs
-  file:
-    path: {{item}}
-    state: diretory
+- name: 2 new file ports.conf
+  copy:
+    src: "ports.conf"
+    dest: "/etc/apache2/ports.conf"
+    backup: true
 
-- name: copy an index.html
-  template:
-    src: index.html.j2
-    dest: {{apache_docroot}}/index.html
+- name: 3 change port default virtualhost
+  lineinfile:
+    path: "/etc/apache2/sites-available/000-default.conf"
+    regexp: '<VirtualHost \*:80>'
+    line: '<VirtualHost *:8080>'
+    backup: true
 
-- name: copy an httpd.conf
-  template:
-    src: httpd.conf-{{ansible_os_family}}.j2
-    dest: {{apache_config}}
-    notify: restart apache
+#- name: create site dirs
+#  file:
+#    path: {{item}}
+#    state: diretory
 
-- name: start apache
-  service:
-    name: httpd
-    state: started
-    enable: yes
+#- name: copy an index.html
+#  template:
+#    src: index.html.j2
+#    dest: {{apache_docroot}}/index.html
+#
+#- name: copy an httpd.conf
+#  template:
+#    src: httpd.conf-{{ansible_os_family}}.j2
+#    dest: {{apache_config}}
+#    notify: restart apache
+
+#- name: start apache
+#  service:
+#    name: httpd
+#    state: started
+#    enable: yes
 
 

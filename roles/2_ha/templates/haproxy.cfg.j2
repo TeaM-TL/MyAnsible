@@ -63,8 +63,8 @@ backend ldaps_servers
     balance             roundrobin
     option              ssl-hello-chk
     timeout server      1800s
-    server              ldap1 ldap167:1636 ssl verify required ca-file /etc/pki/ca.pem check
-    server              ldap2 ldap177:1636 ssl verify required ca-file /etc/pki/ca.pem check
+    server              ldaps1 ldap167:1636 ssl verify required ca-file /etc/pki/ca.pem check
+    server              ldaps2 ldap177:1636 ssl verify required ca-file /etc/pki/ca.pem check
 {% endif %}
 
 # - WWW frontend ---------------------------------------
@@ -80,12 +80,12 @@ backend http_servers
     mode    http
     balance             roundrobin
 {% if host_type == "ldap" %}
-    server              lamp1 lamp166:8080 check
-    server              lamp2 lamp176:8080 check
+    server              http1 ldap167:8080 check
+    server              http2 ldap177:8080 check
 {% endif %}
 {% if host_type == "lamp" %}
-    server              lamp1 lamp166:8080 check
-    server              lamp2 lamp176:8080 check
+    server              http1 lamp166:8080 check
+    server              http2 lamp176:8080 check
 {% endif %}
 
 #frontend https
