@@ -1,8 +1,19 @@
 ---
-packages:
+zabbix_version: '5.4'
+zabbix_ubuntu: "{{ ansible_distribution_version }}"
+zabbix_url_deb: "https://repo.zabbix.com/zabbix/{{ zabbix_version }}/ubuntu/pool/main/z/zabbix-release/zabbix-release_{{ zabbix_version }}-1+ubuntu{{ zabbix_ubuntu }}_all.deb"
+
+zabbix_agent_packages:
+  - zabbix-agent
+
+zabbix_server_packages:
   - zabbix-agent
   - zabbix-apache-conf
   - zabbix-frontend-php
   - zabbix-server-mysql
-  - zabbix-release
+  - php-mysql
+  - php-gd
+  - php-bcmath
+  - php-net-socket
+  - php-pear
 

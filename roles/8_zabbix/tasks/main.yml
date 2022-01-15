@@ -1,9 +1,28 @@
 ---
-- name: 1 install Zabbix server
+- name: 1 install repo Zabbix
   apt:
-    name: {{ packages }}
+    deb: "{{ zabbix_url_deb }}"
     state: present
-#
+
+      #- name: 2 apt update
+      #  apt:
+      #    update_cache: yes
+      #    cache_valid_time: 86400 # one day
+
+- name: 2 install Zabbix agent
+  apt:
+    name: "{{ zabbix_agent_packages }}"
+    update_cache: yes
+    state: present
+  when: zabbix_host == "agent"
+
+- name: 3 install Zabbix server
+  apt:
+    name: "{{ zabbix_server_packages }}"
+    update_cache: yes
+    state: present
+  when: zabbix_host == "server"
+
 #- name: 2 new file ports.conf
 #  copy:
 #    src: "ports.conf"

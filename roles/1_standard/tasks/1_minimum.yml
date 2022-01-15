@@ -7,7 +7,6 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   with_items:
-    - { src: "apt_zabbix", dest: "/etc/apt/sources.list.d/zabbix.list", owner: "root", group: "root", mode: "644" }
     - { src: "vimrc",      dest: "/etc/skel/.vimrc",                    owner: "root", group: "root", mode: "644" }
     - { src: "vimrc",      dest: "/root/.vimrc",                        owner: "root", group: "root", mode: "644" }
     - { src: "vimrc",      dest: "/home/tlu/.vimrc",                    owner: "tlu",  group: "tlu",  mode: "644" }
