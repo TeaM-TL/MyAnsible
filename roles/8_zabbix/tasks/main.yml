@@ -26,11 +26,18 @@
     backup: yes
     backrefs: yes
   with_items:
-    - { regex: '^(Server=).*',   line: '192.168.0.0/24' }
-    - { regex: '^(Hostname=).*', line: '{{ ansible_fqdn }}' }
-    #ServerActive=127.0.0.1/192.168.0.167,192.168.0.177
+    - { regex: '^(Server=).*',       line: '192.168.0.0/24' }
+    - { regex: '^(Hostname=).*',     line: '{{ ansible_fqdn }}' }
+    - { regex: '^(ServerActive=).*', line: '192.168.0.167,192.168.0.177' }
 
-- name: 5 configure server
+- name: 5 start Zabbix agent
+  ansible.builtin.systemd:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes
+    masked: no
+
+- name: 6 configure server
   ansible.builtin.lineinfile:
     path: "/etc/zabbix/zabbix_server.conf"
     regexp: '{{ item.regex }}'
@@ -38,34 +45,56 @@
     backup: yes
     backrefs: yes
   with_items:
-  - { regex: '^# (DBHost=).*',     line: '192.168.0.196' }
-  - { regex: '^# (DBName=).*',     line: 'zabbix' }
-  - { regex: '^# (DBUser=).*',     line: 'zabbix' }
-  - { regex: '^# (DBPassword)=.*', line: 'Z@bbiks' }
-  - { regex: '^# (ListenIP)=.*',   line: '0.0.0.0' }
+  - { regex: '^# (DBHost=).*',     line: '{{ zabbix_db_host }}' }
+  - { regex: '^# (DBPort=).*',     line: '{{ zabbix_db_port }}' }
+  - { regex: '^(DBName=).*',       line: '{{ zabbix_db_db }}' }
+  - { regex: '^(DBUser=).*',       line: '{{ zabbix_db_user }}' }
+  - { regex: '^# (DBPassword=).*', line: '{{ zabbix_db_passwd }}' }
+  - { regex: '^# (ListenIP=).*',   line: '0.0.0.0' }
   when: zabbix_host == "server"
 
-
-#- name: create site dirs
-#  file:
-#    path: {{item}}
-#    state: diretory
-
-#- name: copy an index.html
-#  template:
-#    src: index.html.j2
-#    dest: {{apache_docroot}}/index.html
-#
-#- name: copy an httpd.conf
-#  template:
-#    src: httpd.conf-{{ansible_os_family}}.j2
-#    dest: {{apache_config}}
-#    notify: restart apache
-
-- name: start Zabbix agent
-  systemd:
-    name: zabbix-agent
+- name: 7 start Zabbix server
+  ansible.builtin.systemd:
+    name: zabbix-server
     state: restarted
-    enable: yes
+    enabled: yes
+    masked: no
 
+- name: 8 copy GUI config
+  copy:
+    src: /usr/share/zabbix/conf/zabbix.conf.php.example
+    dest: /etc/zabbix/web/zabbix.conf.php
+    remote_src: yes
+  when: zabbix_host == "server"
+
+- name: 9 configure GUI
+  ansible.builtin.replace:
+    path: /etc/zabbix/web/zabbix.conf.php
+    regexp: ^(.DB\['{{ item.regex }}'\]\t).*$
+    replace: \1= '{{ item.line }}';
+    backup: no
+  with_items:
+    - { regex: "SERVER",   line: '{{ zabbix_db_host }}' }
+    - { regex: "PORT",     line: '{{ zabbix_db_port }}' }
+    - { regex: "DATABASE", line: '{{ zabbix_db_db }}' }
+    - { regex: "USER",     line: '{{ zabbix_db_user }}' }
+    - { regex: "PASSWORD", line: '{{ zabbix_db_passwd }}' }
+  when: zabbix_host == "server"
+
+- name: 10 configure GUI
+  ansible.builtin.replace:
+    path: /etc/zabbix/web/zabbix.conf.php
+    regexp: ^(\${{ item.regex }}\t).*$
+    replace: \1= '{{ item.line }}';
+    backup: no
+  with_items:
+    - { regex: "ZBX_SERVER",      line: '{{ zabbix_server }}' }
+    - { regex: "ZBX_SERVER_NAME", line: '{{ ansible_hostname | upper }}' }
+  when: zabbix_host == "server"
+
+- name: 11 restart Apache server
+  ansible.builtin.systemd:
+    name: apache2
+    state: restarted
+  when: zabbix_host == "server"
 

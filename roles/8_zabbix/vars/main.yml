@@ -1,4 +1,11 @@
 ---
+zabbix_db_host: 192.168.0.196
+zabbix_db_db: zabbix
+zabbix_db_port: 3306
+zabbix_db_user: zabbix
+zabbix_db_passwd: Z@bbiks
+zabbix_server: 192.168.0.197
+
 zabbix_version: '5.4'
 zabbix_ubuntu: "{{ ansible_distribution_version }}"
 zabbix_url_deb: "https://repo.zabbix.com/zabbix/{{ zabbix_version }}/ubuntu/pool/main/z/zabbix-release/zabbix-release_{{ zabbix_version }}-1+ubuntu{{ zabbix_ubuntu }}_all.deb"
