@@ -1,10 +1,10 @@
 ---
-- name: agent
+- name: Agent
   import_tasks: 1_agent.yml
 
-- name: server
-  import_tasks: 1_server.yml
+- name: Server
+  import_tasks: 2_server.yml
 
-- name: gui
-  import_tasks: 1_gui.yml
+- name: GUI
+  import_tasks: 3_gui.yml
 
