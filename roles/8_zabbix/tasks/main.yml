@@ -4,11 +4,6 @@
     deb: "{{ zabbix_url_deb }}"
     state: present
 
-      #- name: 2 apt update
-      #  apt:
-      #    update_cache: yes
-      #    cache_valid_time: 86400 # one day
-
 - name: 2 install Zabbix agent
   apt:
     name: "{{ zabbix_agent_packages }}"
@@ -23,18 +18,33 @@
     state: present
   when: zabbix_host == "server"
 
-#- name: 2 new file ports.conf
-#  copy:
-#    src: "ports.conf"
-#    dest: "/etc/apache2/ports.conf"
-#    backup: true
-#
-#- name: 3 change port default virtualhost
-#  lineinfile:
-#    path: "/etc/apache2/sites-available/000-default.conf"
-#    regexp: '<VirtualHost \*:80>'
-#    line: '<VirtualHost *:8080>'
-#    backup: true
+- name: 4 configure agent
+  ansible.builtin.lineinfile:
+    path: "/etc/zabbix/zabbix_agentd.conf"
+    regexp: '{{ item.regex }}'
+    line:   '\g<1>{{ item.line }}'
+    backup: yes
+    backrefs: yes
+  with_items:
+    - { regex: '^(Server=).*',   line: '192.168.0.0/24' }
+    - { regex: '^(Hostname=).*', line: '{{ ansible_fqdn }}' }
+    #ServerActive=127.0.0.1/192.168.0.167,192.168.0.177
+
+- name: 5 configure server
+  ansible.builtin.lineinfile:
+    path: "/etc/zabbix/zabbix_server.conf"
+    regexp: '{{ item.regex }}'
+    line:   '\g<1>{{ item.line }}'
+    backup: yes
+    backrefs: yes
+  with_items:
+  - { regex: '^# (DBHost=).*',     line: '192.168.0.196' }
+  - { regex: '^# (DBName=).*',     line: 'zabbix' }
+  - { regex: '^# (DBUser=).*',     line: 'zabbix' }
+  - { regex: '^# (DBPassword)=.*', line: 'Z@bbiks' }
+  - { regex: '^# (ListenIP)=.*',   line: '0.0.0.0' }
+  when: zabbix_host == "server"
+
 
 #- name: create site dirs
 #  file:
@@ -52,10 +62,10 @@
 #    dest: {{apache_config}}
 #    notify: restart apache
 
-#- name: start apache
-#  service:
-#    name: httpd
-#    state: started
-#    enable: yes
+- name: start Zabbix agent
+  systemd:
+    name: zabbix-agent
+    state: restarted
+    enable: yes
 
 
