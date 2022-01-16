@@ -1,0 +1,50 @@
+---
+#--------------------------------------------
+#-  AGENT
+#--------------------------------------------
+- name: 1 install repo Zabbix
+  apt:
+    deb: "{{ zabbix_url_deb }}"
+    state: present
+
+- name: 2 install Zabbix agent
+  apt:
+    name: "{{ zabbix_agent_packages }}"
+    update_cache: yes
+    state: present
+  when: zabbix_host == "agent"
+
+- name: 4 configure agent
+  ansible.builtin.lineinfile:
+    path: "/etc/zabbix/zabbix_agentd.conf"
+    regexp: '{{ item.regex }}'
+    line:   '\g<1>{{ item.line }}'
+    backup: yes
+    backrefs: yes
+  with_items:
+    - { regex: '^(Server=).*',       line: '192.168.0.0/24' }
+    - { regex: '^(Hostname=).*',     line: '{{ ansible_fqdn }}' }
+    - { regex: '^(ServerActive=).*', line: '192.168.0.167,192.168.0.177' }
+
+- name: 5 create missing directories
+  ansible.builtin.file:
+    path: /etc/zabbix/scripts
+    state: directory
+    mode: '0755'
+
+- name: 5 agent scripts for OpenDJ
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/zabbix/{{ item }}"
+  with_items:
+    - zabbix_agentd.d/opendj.conf
+    - scripts/opendj_stat.sh
+  when: host_type == "ldap"
+
+- name: 6 start Zabbix agent
+  ansible.builtin.systemd:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes
+    masked: no
+
