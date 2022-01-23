@@ -4,54 +4,15 @@
     name: "{{ packages }}"
     state: present
 
-- name: 2 new file ports.conf
-  copy:
-    src: "ports.conf"
-    dest: "/etc/apache2/ports.conf"
-    backup: true
-
-- name: 3 change port default virtualhost
-  lineinfile:
-    path: "/etc/apache2/sites-available/000-default.conf"
-    regexp: '<VirtualHost \*:80>'
-    line: '<VirtualHost *:8080>'
-    backup: true
-
-#- name: 4 enable apache mods
-#  ansible.builtin.file:
-#    src: "{{ item.src }}"
-#    dest: "{{ item.dest }}"
-#    owner: foo
-#    group: foo
-#    state: link
-#  with_items:
-#    - 
-
-- name: 5 remove defaut index.html
+- name: 2 remove defaut index.html
   file:
     path: /var/www/html/index.html
     state: absent
 
-- name: 6 copy defaut web content
+- name: 3 copy defaut web content
   ansible.builtin.unarchive:
     src: web.tar.gz
     dest: /var/www/html
-
-
-#  template:
-#    src: index.html.j2
-#    dest: {{apache_docroot}}/index.html
-#
-#- name: copy an httpd.conf
-#  template:
-#    src: httpd.conf-{{ansible_os_family}}.j2
-#    dest: {{apache_config}}
-#    notify: restart apache
-
-#- name: start apache
-#  service:
-#    name: httpd
-#    state: started
-#    enable: yes
-
+    owner: www-data
+    group: www-data
 

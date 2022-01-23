@@ -18,7 +18,6 @@ opendj_root: "{{ opendj_opt }}/opendj"
 opendj_bin: "{{ opendj_root }}/bin"
 opendj_config: "{{ opendj_root }}/config"
 opendj_logs: "{{ opendj_root }}/logs"
-opendj_context: "dc=team-tl,dc=intranet"
 opendj_port_ldap: '1389'
 opendj_port_ldaps: '1636'
 opendj_port_admin: '4444'
@@ -37,18 +36,12 @@ opendj_url: "https://github.com/OpenIdentityPlatform/OpenDJ/releases/download/{{
 opendj_url_deb: "{{ opendj_url }}/{{ opendj_package_deb }}"
 
 # Replication parameters
-opendj_replica_hostname: ldap167.team-tl.intranet
+opendj_replica_hostname: "ldap167.{{ domain_name }}"
 opendj_replica_dm_password: "P@S5w0rd"
 opendj_replica_dm_password_file: "/home/{{ opendj_user }}/.pwddm"
 opendj_replica_admin_password: "P@S5w0rd"
 opendj_replica_admin_password_file: "/home/{{ opendj_user }}/.pwdadm"
 
-# ------------------ HA Keepalived ------------------------
-keepalive_trackname: "track_opendj"
-keepalive_process: "haproxy"
-keepalive_id: '197'
-keepalive_advert: '1'
-keepalive_password: "p@S5f0rD"
-keepalive_vip: "192.168.0.197"
-keepalive_weight: '20'
+# ------------------ Zabbix -------------------------------
+zabbix_host: "server"
 

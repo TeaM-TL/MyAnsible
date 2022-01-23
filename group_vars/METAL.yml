@@ -1,0 +1,16 @@
+---
+packages_specific:
+  - smartmontools
+  - mariadb-client
+
+time_server: "pool 0.pl.pool.ntp.org iburst"
+
+# ------------------ HA Keepalived ------------------------
+keepalive_trackname: "track_haproxy"
+keepalive_process: "haproxy"
+keepalive_id: '197'
+keepalive_advert: '1'
+keepalive_password: "paS5f0Rt"
+keepalive_vip: "192.168.0.197"
+keepalive_weight: '20'
+

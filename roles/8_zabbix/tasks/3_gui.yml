@@ -2,14 +2,14 @@
 #--------------------------------------------
 #-  GUI
 #--------------------------------------------
-- name: 9 copy GUI config
+- name: 3.1 copy GUI config
   copy:
     src: /usr/share/zabbix/conf/zabbix.conf.php.example
     dest: /etc/zabbix/web/zabbix.conf.php
     remote_src: yes
   when: zabbix_host == "server"
 
-- name: 10 configure GUI
+- name: 3.2 configure GUI
   ansible.builtin.replace:
     path: /etc/zabbix/web/zabbix.conf.php
     regexp: ^(.DB\['{{ item.regex }}'\]\t).*$
@@ -23,7 +23,7 @@
     - { regex: "PASSWORD", line: '{{ zabbix_db_passwd }}' }
   when: zabbix_host == "server"
 
-- name: 11 configure GUI
+- name: 3.3 configure GUI
   ansible.builtin.replace:
     path: /etc/zabbix/web/zabbix.conf.php
     regexp: ^(\${{ item.regex }}\t).*$
@@ -34,7 +34,7 @@
     - { regex: "ZBX_SERVER_NAME", line: '{{ ansible_hostname | upper }}' }
   when: zabbix_host == "server"
 
-- name: 12 restart Apache server
+- name: 3.4 restart Apache server
   ansible.builtin.systemd:
     name: apache2
     state: restarted

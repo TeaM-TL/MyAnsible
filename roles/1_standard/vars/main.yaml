@@ -2,7 +2,7 @@
 network: "192.168.0.0/24"
 
 # DUF
-version: '0.6.2'
+version: '0.7.0'
 
 duf_url: "https://github.com/muesli/duf/releases/download/v{{ version }}"
 duf_package_deb: "duf_{{ version }}_linux_amd64.deb"

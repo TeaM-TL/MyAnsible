@@ -2,14 +2,14 @@
 #--------------------------------------------
 #-  SERVER
 #--------------------------------------------
-- name: 3 install Zabbix server
+- name: 2.1 install Zabbix server
   apt:
     name: "{{ zabbix_server_packages }}"
     update_cache: yes
     state: present
   when: zabbix_host == "server"
 
-- name: 7 configure server
+- name: 2.2 configure server
   ansible.builtin.lineinfile:
     path: "/etc/zabbix/zabbix_server.conf"
     regexp: '{{ item.regex }}'
@@ -25,10 +25,11 @@
   - { regex: '^# (ListenIP=).*',   line: '0.0.0.0' }
   when: zabbix_host == "server"
 
-- name: 8 start Zabbix server
+- name: 2.3 start Zabbix server
   ansible.builtin.systemd:
     name: zabbix-server
     state: restarted
     enabled: yes
     masked: no
+  when: zabbix_host == "server"
 

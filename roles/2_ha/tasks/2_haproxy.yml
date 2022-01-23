@@ -1,9 +1,12 @@
 ---
 - name: 2.1 install haproxy
   apt:
-    name: haproxy
+    name:
+      - haproxy
+      - socat
     state: present
   when: ansible_os_family == "Debian"
+  notify: haproxy_restart
 
 - name: 2.2 copy config
   template:
@@ -13,13 +16,9 @@
     owner: root
     group: root
     backup: true
+  notify: haproxy_reload
 
-- name: 2.3 DH2048
-  command: openssl dhparam -out /etc/haproxy/dhparams.pem 2048
+#- name: 2.3 DH2048
+#  command: openssl dhparam -out /etc/haproxy/dhparams.pem 2048
 
-- name: 2.4 restart haproxy service
-  systemd:
-    name: haproxy
-    state: started
-    enabled: yes
 

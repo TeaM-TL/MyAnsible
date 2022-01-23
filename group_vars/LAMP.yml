@@ -1,15 +1,4 @@
 ---
 packages_specific:
   - apache2
-  - php
-
-# Replication parameters
-
-# ------------------ HA Keepalived ------------------------
-keepalive_trackname: "track_lamp"
-keepalive_process: "haproxy"
-keepalive_id: 196
-keepalive_advert: '1'
-keepalive_password: "p@S5f0rD"
-keepalive_vip: "192.168.0.196"
 

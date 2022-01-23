@@ -1,0 +1,19 @@
+---
+- name: 2h.1 reloaded services
+  systemd:
+    name: "{{ item }}"
+    state: reloaded
+    enabled: yes
+  with_items:
+    - haproxy
+  listen: haproxy_reload
+
+- name: 2h.2 restart services
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - rsyslog
+    - haproxy
+  listen: haproxy_restart

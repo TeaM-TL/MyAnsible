@@ -1,18 +1,20 @@
 ---
 - name: Install my servers
-  hosts: LDAP
+  hosts: METAL
+    #hosts: LDAP
   serial: true
   become: true
   gather_facts: true
   roles:
     #- 1_standard
-    #- 2_ha
+    - 2_ha
     #- 5_dnsmasq
     #- 6_lamp_apache
     #- 6_lamp_mariadb
     #- 7_ldap_opendj
     #- 7_ldap_opendj_replica
     #- 7_ldap_opendj_upgrade
+    #- 7_ldap_tools
     #- 8_ca_pki_easyrsa
-    - 8_zabbix
+    #- 8_zabbix
 
