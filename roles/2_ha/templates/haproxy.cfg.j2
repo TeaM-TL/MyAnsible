@@ -82,7 +82,7 @@ frontend                http
     mode                http
     option              httplog
     option              forwardfor
-    acl                 aci_url_egw         path_beg /e/
+    acl                 aci_url_egw         path_beg /e
     use_backend         http_servers_egw    if aci_url_egw
     default_backend     http_servers
 
