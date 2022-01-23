@@ -1,4 +1,22 @@
 ---
+- name: 1h.1 reloaded services
+  systemd:
+    name: "{{ item }}"
+    state: reloaded
+    enabled: yes
+  with_items:
+    - keepalived
+  listen: keepalived_reload
+
+- name: 1h.2 restart services
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - keepalived
+  listen: keepalived_restart
+
 - name: 2h.1 reloaded services
   systemd:
     name: "{{ item }}"

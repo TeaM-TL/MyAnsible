@@ -4,12 +4,14 @@
     name: keepalived
     state: present
   when: ansible_os_family == "Debian"
+  notify: keepalived_restart
 
 - name: 1.1 Install keepalived on Oracle Linux
   yum:
     name: keepalived
     state: present
   when: ansible_os_family == "RedHat"
+  notify: keepalived_restart
 
 - ansible.posix.sysctl:
     name: net.ipv4.ip_nonlocal_bind
@@ -25,6 +27,7 @@
     mode: '0644'
     owner: root
     group: root
+  notify: keepalived_reload
 
 - name: 1.4.1 Open port 112 in firewall in Ubuntu
   ufw:
