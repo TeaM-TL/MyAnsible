@@ -1,0 +1,21 @@
+---
+- name: 2.1 install SelfSevice LdapToolBox
+  apt:
+    deb: https://www.ltb-project.org/archives/self-service-password_1.4.3-1_all.deb
+    state: present
+
+- name: 2.2 copy config files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/{{ item }}"
+  with_items:
+    - "usr/share/self-service-password/conf/config.inc.local.php"
+
+- name: 2.3 copy files
+  copy:
+    src: "{{ item }}"
+    dest: "/{{ item }}"
+  with_items:
+    - "usr/share/self-service-password/htdocs/images/logo.png"
+    - "etc/apache2/conf-enabled/self-service-password.conf"
+

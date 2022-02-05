@@ -1,0 +1,21 @@
+---
+- name: 1.1 install LAM
+  apt:
+    deb: /tmp/ldap-account-manager_7.5-1_all.deb
+
+- name: 1.2 copy config files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/{{ item }}"
+  with_items:
+    - "var/lib/ldap-account-manager/config/lam.conf"
+    - "etc/ldap-account-manager/config.cfg"
+
+- name: 1.3 copy a png file
+  copy:
+    src: "{{ item }}"
+    dest: "/{{ item }}"
+  with_items:
+    - "usr/share/ldap-account-manager/graphics/lam.png"
+
+

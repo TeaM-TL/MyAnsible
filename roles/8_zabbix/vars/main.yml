@@ -1,5 +1,5 @@
 ---
-zabbix_db_host: 192.168.0.196
+zabbix_db_host: 192.168.0.197
 zabbix_db_db: zabbix
 zabbix_db_port: 3306
 zabbix_db_user: zabbix
@@ -14,13 +14,29 @@ zabbix_agent_packages:
   - zabbix-agent
 
 zabbix_server_packages:
-  - zabbix-agent
-  - zabbix-apache-conf
-  - zabbix-frontend-php
   - zabbix-server-mysql
-  - php-mysql
-  - php-gd
-  - php-bcmath
+
+zabbix_gui_packages:
+  - zabbix-apache-conf
+  - zabbix-nginx-conf
+  - zabbix-frontend-php
+  - php7.4
+  - php7.4-bcmath
+  - php7.4-fpm
+  - php7.4-gd
+  - php7.4-gettext
+  - php7.4-json
+  - php7.4-ldap
+  - php7.4-mbstring
+  - php7.4-mysql
   - php-net-socket
   - php-pear
+  - php7.4-xml
+    #- php7.4-ctype
+    #- php7.4-libxml
+    #- php7.4-session
+    #- php7.4-openssl
+    #- php7.4-socket
+    #- php7.4-xmlreader
+    #- php7.4-xmlwriter
 

@@ -1,0 +1,13 @@
+---
+- name: requiremensts
+  import_tasks: 0_requirements.yml
+
+- name: LAM
+  import_tasks: 1_lam.yml
+
+- name: Self service
+  import_tasks: 2_self_service.yml
+
+    #- name: 3 apache
+    #  import_tasks: 3_apache.yml
+

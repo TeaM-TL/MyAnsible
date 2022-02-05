@@ -64,13 +64,13 @@ frontend                ldaps
 # - backend -------------------------------------------
 backend                 ldap_servers
     option              ldap-check
-    server              ldap1 ldap167.{{ domain_name }}:389 check
-    server              ldap2 ldap177.{{ domain_name }}:389 check
+    server              ldap1 serwer2.{{ domain_name }}:1389 check
+    server              ldap2 serwer3.{{ domain_name }}:1389 check
 
 #backend                 ldaps_servers
 #    option              ssl-hello-chk
-#    server              ldaps1 ldap167.{{ domain_name }}:636 ssl verify required ca-file /etc/ssl/certs/ca.pem check
-#    server              ldaps2 ldap177.{{ domain_name }}:636 ssl verify required ca-file /etc/ssl/certs/ca.pem check
+#    server              ldaps1 serwer2.{{ domain_name }}:1636 ssl verify required ca-file /etc/ssl/certs/ca.pem check
+#    server              ldaps2 serwer3.{{ domain_name }}:1636 ssl verify required ca-file /etc/ssl/certs/ca.pem check
 
 # ======================================================
 # - WWW
@@ -79,21 +79,15 @@ backend                 ldap_servers
 frontend                http
     bind                *:80
     bind                *:443 ssl crt /etc/ssl/{{ansible_hostname}}.pem
+    # redirect http -> https
+    #redirect scheme     https code 301 if !{ ssl_fc }
     mode                http
     option              httplog
     option              forwardfor
-    acl                 aci_url_egw         path_beg /e
-    use_backend         http_servers_egw    if aci_url_egw
     default_backend     http_servers
 
 # - backend --------------------------------------------
 backend                 http_servers
-    mode                http
-    option httpchk      HEAD / HTTP/1.0
-    server              http1 ldap167.{{ domain_name }}:80 check
-    server              http2 ldap177.{{ domain_name }}:80 check
-
-backend                 http_servers_egw
     mode                http
     option httpchk      HEAD / HTTP/1.0
     server              http1 lamp166.{{ domain_name }}:80 check

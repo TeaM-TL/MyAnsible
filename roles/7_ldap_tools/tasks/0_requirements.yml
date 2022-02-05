@@ -1,0 +1,7 @@
+---
+- name: 1 install required packages
+  apt:
+    name: "{{ ldap_packages }}"
+    update_cache: yes
+    state: present
+

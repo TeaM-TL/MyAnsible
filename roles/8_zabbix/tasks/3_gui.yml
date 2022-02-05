@@ -2,14 +2,23 @@
 #--------------------------------------------
 #-  GUI
 #--------------------------------------------
-- name: 3.1 copy GUI config
+- name: 3.1 install Zabbix gui required packages
+  apt:
+    name: "{{ zabbix_gui_packages }}"
+    update_cache: yes
+    state: present
+  when: zabbix_gui == "yes"
+  notify: zabbix-apache-reloaded
+
+- name: 3.2 copy GUI config
   copy:
     src: /usr/share/zabbix/conf/zabbix.conf.php.example
     dest: /etc/zabbix/web/zabbix.conf.php
     remote_src: yes
-  when: zabbix_host == "server"
+  when: zabbix_gui == "yes"
+  notify: zabbix-php-restarted
 
-- name: 3.2 configure GUI
+- name: 3.3 configure GUI
   ansible.builtin.replace:
     path: /etc/zabbix/web/zabbix.conf.php
     regexp: ^(.DB\['{{ item.regex }}'\]\t).*$
@@ -21,9 +30,10 @@
     - { regex: "DATABASE", line: '{{ zabbix_db_db }}' }
     - { regex: "USER",     line: '{{ zabbix_db_user }}' }
     - { regex: "PASSWORD", line: '{{ zabbix_db_passwd }}' }
-  when: zabbix_host == "server"
+  when: zabbix_gui == "yes"
+  notify: zabbix-php-restarted
 
-- name: 3.3 configure GUI
+- name: 3.4 configure GUI
   ansible.builtin.replace:
     path: /etc/zabbix/web/zabbix.conf.php
     regexp: ^(\${{ item.regex }}\t).*$
@@ -32,11 +42,6 @@
   with_items:
     - { regex: "ZBX_SERVER",      line: '{{ zabbix_server }}' }
     - { regex: "ZBX_SERVER_NAME", line: '{{ ansible_hostname | upper }}' }
-  when: zabbix_host == "server"
-
-- name: 3.4 restart Apache server
-  ansible.builtin.systemd:
-    name: apache2
-    state: restarted
-  when: zabbix_host == "server"
+  when: zabbix_gui == "yes"
+  notify: zabbix-php-restarted
 

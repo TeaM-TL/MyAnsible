@@ -1,3 +1,4 @@
 ---
-zabbix_host: "agent"
+zabbix_server: "no"
+zabbix_gui: "no"
 

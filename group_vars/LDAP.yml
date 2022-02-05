@@ -42,6 +42,3 @@ opendj_replica_dm_password_file: "/home/{{ opendj_user }}/.pwddm"
 opendj_replica_admin_password: "P@S5w0rd"
 opendj_replica_admin_password_file: "/home/{{ opendj_user }}/.pwdadm"
 
-# ------------------ Zabbix -------------------------------
-zabbix_host: "server"
-
