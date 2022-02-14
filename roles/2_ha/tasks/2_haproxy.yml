@@ -18,7 +18,11 @@
     backup: true
   notify: haproxy_reload
 
-#- name: 2.3 DH2048
+- name: 2.3 DH2048
+  community.crypto.openssl_dhparam:
+  #openssl_dhparam:
+    path: /etc/haproxy/dhparams.pem
+    size: 2048
 #  command: openssl dhparam -out /etc/haproxy/dhparams.pem 2048
 
 
