@@ -2,12 +2,15 @@
 My ansible roles
 
 ---
+
 ## Idea
-- 1\* - common tasks for every my server
-- 5\* - tasks for bare METAL servers
-- 6\* - tasks for LAMP servers
-- 7\* - tasks for LDAP servers
-- 8\* - tasks for PKI/CA server
+
+Automatically install servers for my own TST environment.
+
+Installation is controlled by `*_install` variable, located in `defaults` directory.
+
+In general hosts are divided into groups: METAL and LAMP.
+If there are differences between hosts in groups - apear in host_vars.
 
 ---
 
@@ -34,10 +37,16 @@ My ansible roles
 - opendj_replica - setup replication between OpenDJ servers
 - opendj_upgrade - upgrade OpenDJ server
 - opendj_keepalived - flying IP for OpenDJ
+  
+### Monitoring
+- telegraf - agent
+- prometheus - data collector, alert manager
 
 ---
 
 ## To Do
+
+### secrets
 
 ### Apache
 - apache - install Apache web server with HTTPS
@@ -54,7 +63,6 @@ My ansible roles
 
 ### MariaDB
 - mariadb - install Galera cluster MariaDB (multimaster)
-- mariadb_keepalived - flying IP for MariaDB
 
 ### OpenVPN
 - openvpn_ldap
@@ -73,5 +81,12 @@ My ansible roles
 - zabbix_agent_opendj - monitoring OpenDJ
 - zabbix_agent_galera - monitoring MariaDB Galera Cluster
 
----
+### Grafana
+- install grafana instance
+- connect into prometheus
+- install dashboards
 
+### Prometheus
+- alert manager
+
+---
