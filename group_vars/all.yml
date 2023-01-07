@@ -1,6 +1,6 @@
 ---
-domain_name: agm.intranet
-opendj_context: "dc=agm,dc=local"
+domain_name: team-tl.intranet
+opendj_context: "dc=team-tl,dc=local"
 
 packages_common:
   - cockpit

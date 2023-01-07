@@ -1,0 +1,19 @@
+---
+# default values
+telegraf_apache: false
+telegraf_docker: false
+telegraf_fail2ban: false
+telegraf_file: false
+telegraf_ipvs: false
+telegraf_libvirt: false
+telegraf_lvm: false
+telegraf_mdstat: false
+telegraf_mysql: false
+telegraf_net_response: false
+telegraf_openldap: false
+telegraf_phpfpm: false
+telegraf_sensors: false
+telegraf_smart: false
+telegraf_wireguard: false
+telegraf_wireless: false
+telegraf_x509_cert: false

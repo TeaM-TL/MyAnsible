@@ -1,7 +1,7 @@
 ---
 - name: 1.1 install LAM
   apt:
-    deb: /tmp/ldap-account-manager_7.5-1_all.deb
+    deb: /tmp/ldap-account-manager_7.7-1_all.deb
 
 - name: 1.2 copy config files
   template:

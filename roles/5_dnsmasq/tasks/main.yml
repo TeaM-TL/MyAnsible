@@ -1,0 +1,36 @@
+---
+- name: 5.1.1 Install dnsmasq RedHat
+  yum:
+    name: dnsmasq
+    state: present
+  when:
+  - ansible_os_family == "RedHat"
+  - dnsmasq_install == "true"
+
+- name: 5.1.2 Install dnsmasq Ubuntu
+  apt:
+    name: dnsmasq
+    state: present
+  when:
+  - ansible_os_family == "Debian"
+  - dnsmasq_install == "true"
+
+- name: 5.2 Copy DNS config
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/dnsmasq.d/{{ item }}"
+    mode: '0644'
+    owner: root
+    group: root
+  when: dnsmasq_install == "true"
+  with_items:
+  - dns.conf
+  - dhcp.conf
+  
+- name: 5.3 restart daemon
+  ansible.builtin.systemd:
+    name: dnsmasq
+    state: restarted
+    enabled: true
+  when: dnsmasq_install == "true"
+      

@@ -1,0 +1,4 @@
+---
+keepalive_install: "false"
+haproxy_install: "false"
+pacemaker_install: "false"

@@ -1,0 +1,3 @@
+---
+# default values
+prometheus_install: false

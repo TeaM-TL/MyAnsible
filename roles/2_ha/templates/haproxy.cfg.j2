@@ -18,7 +18,7 @@ global
     ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
     ssl-dh-param-file /etc/haproxy/dhparams.pem
 
-# ------------------------------------------------------
+# ======================================================
 defaults
     log                 global
     option              dontlognull
@@ -33,13 +33,14 @@ defaults
     errorfile 502       /etc/haproxy/errors/502.http
     errorfile 503       /etc/haproxy/errors/503.http
     errorfile 504       /etc/haproxy/errors/504.http
-    mode                tcp
 
 # ======================================================
 # - STATS
 # ------------------------------------------------------
 frontend                stats
     bind                *:8404
+    bind                *:8444 ssl crt /etc/ssl/{{ ansible_hostname }}.pem
+    http-request use-service prometheus-exporter if { path /metrics }
     mode                http
     stats               enable
     stats uri           /stats
@@ -50,32 +51,27 @@ frontend                stats
 # ======================================================
 # - LDAP
 # ------------------------------------------------------
-# - frontend -------------------------------------------
 frontend                ldap
     bind                *:389
-    option              tcplog
-    default_backend     ldap_servers
-
-frontend                ldaps
     bind                *:636 ssl crt /etc/ssl/{{ansible_hostname}}.pem
+    mode                tcp
     option              tcplog
     default_backend     ldap_servers
 
-# - backend -------------------------------------------
 backend                 ldap_servers
+    mode                tcp
     option              ldap-check
-    server              ldap1 serwer2.{{ domain_name }}:1389 check
-    server              ldap2 serwer3.{{ domain_name }}:1389 check
+    server              ldap163 serwer2.{{ domain_name }}:1389 check
+    server              ldap171 serwer3.{{ domain_name }}:1389 check
 
 #backend                 ldaps_servers
 #    option              ssl-hello-chk
-#    server              ldaps1 serwer2.{{ domain_name }}:1636 ssl verify required ca-file /etc/ssl/certs/ca.pem check
-#    server              ldaps2 serwer3.{{ domain_name }}:1636 ssl verify required ca-file /etc/ssl/certs/ca.pem check
+#    server              ldaps163 serwer2.{{ domain_name }}:1636 ssl verify required ca-file /etc/ssl/certs/ca.pem check
+#    server              ldaps171 serwer3.{{ domain_name }}:1636 ssl verify required ca-file /etc/ssl/certs/ca.pem check
 
 # ======================================================
 # - WWW
 # ------------------------------------------------------
-# - frontend -------------------------------------------
 frontend                http
     bind                *:80
     bind                *:443 ssl crt /etc/ssl/{{ansible_hostname}}.pem
@@ -86,39 +82,38 @@ frontend                http
     option              forwardfor
     default_backend     http_servers
 
-# - backend --------------------------------------------
 backend                 http_servers
     mode                http
     option httpchk      HEAD / HTTP/1.0
-    server              http1 lamp166.{{ domain_name }}:80 check
-    server              http2 lamp176.{{ domain_name }}:80 check
+    server              http166 lamp166.{{ domain_name }}:80 check
+    server              http176 lamp176.{{ domain_name }}:80 check backup
 
 # ======================================================
 # - MariaDB
 # ------------------------------------------------------
-# - frontend -------------------------------------------
 frontend                mariadb
     bind                *:3306
+    mode                tcp
     option              tcplog
     default_backend     mariadb_servers
 
-# - backend --------------------------------------------
 backend                 mariadb_servers
-    option mysql-check  user haproxy
-    server              mariadb1 lamp166.{{ domain_name }}:3306 check
-    server              mariadb2 lamp176.{{ domain_name }}:3306 check
+    mode                tcp
+#    option mysql-check  user haproxy
+    server              mariadb163 serwer2.{{ domain_name }}:13306 check
+    server              mariadb171 serwer3.{{ domain_name }}:13306 check backup
+    server              mariadb176 lamp176.{{ domain_name }}:3306 check backup
 
 # ======================================================
 # - Zabbix
 # ------------------------------------------------------
-# - frontend -------------------------------------------
 frontend                zabbix
     bind                *:10051
+    mode                tcp
     option              tcplog
     default_backend     zabbix_servers
 
-# - backend --------------------------------------------
 backend zabbix_servers
-    server              zabbix1 ldap167.{{ domain_name }}:10051 check
-    server              zabbix2 ldap177.{{ domain_name }}:10051 check
-
+    mode                tcp
+    server              zabbix163 serwer2.{{ domain_name }}:10055 check
+    server              zabbix171 serwer3.{{ domain_name }}:10055 check backup

@@ -1,8 +1,8 @@
 ---
 - name: Install my servers
+  hosts: all
   #hosts: METAL
-  #hosts: LDAP
-  hosts: LAMP
+  #hosts: LAMP
   serial: true
   become: true
   gather_facts: true
@@ -10,7 +10,10 @@
     #- 1_standard
     #- 2_ha
     #- 5_dnsmasq
-    - 6_lamp_apache
+    #- 8_prometheus
+    #- 8_telegraf
+
+    #- 6_lamp_apache
     #- 6_lamp_nginx
     #- 6_lamp_mariadb
     #- 7_ldap_opendj

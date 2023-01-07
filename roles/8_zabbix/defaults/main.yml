@@ -1,4 +1,3 @@
 ---
-zabbix_server: "no"
 zabbix_gui: "no"
-
+zabbix_server: "yes"

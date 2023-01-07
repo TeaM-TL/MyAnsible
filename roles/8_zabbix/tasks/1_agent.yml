@@ -39,6 +39,13 @@
     dest: "/etc/zabbix/{{ item }}"
   with_items:
     - zabbix_agentd.d/opendj.conf
+  when: host_ldap == "yes"
+
+- name: 1.6 agent scripts for OpenDJ
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "/etc/zabbix/{{ item }}"
+  with_items:
     - scripts/opendj_stat.sh
-  when: host_type == "ldap"
+  when: host_ldap == "yes"
 

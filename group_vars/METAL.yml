@@ -5,6 +5,10 @@ packages_specific:
 
 time_server: "pool 0.pl.pool.ntp.org iburst"
 
+host_type: metal
+host_ldap: yes
+zabbix_server: yes
+
 # ------------------ HA Keepalived ------------------------
 keepalive_trackname: "track_haproxy"
 keepalive_process: "haproxy"
@@ -14,3 +18,22 @@ keepalive_password: "paS5f0Rt"
 keepalive_vip: "192.168.0.197"
 keepalive_weight: '20'
 
+# ------------------ telegraf common ----------------------
+telegraf_libvirt: "true"
+telegraf_lvm: "true"
+telegraf_mdstat: "true"
+telegraf_mysql: "true"
+telegraf_net_response: "true"
+telegraf_openldap: "true"
+telegraf_sensors: "true"
+telegraf_smart: "true"
+telegraf_x509_cert: "true"
+
+# ------------------ what to install ---------------------------
+prometheus_install: "true"
+dnsmasq_install: "true"
+mariadb_install: "true"
+opendj_install: "true"
+keepalive_install: "true"
+haproxy_install: "true"
+pacemaker_install: "true"

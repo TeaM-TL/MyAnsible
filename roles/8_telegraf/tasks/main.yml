@@ -1,0 +1,86 @@
+---
+- name: 8.1.1 get and install telegraf Ubuntu
+  ansible.builtin.apt:
+    deb: "https://dl.influxdata.com/telegraf/releases/{{ telegraf_deb }}"
+  when: ansible_os_family == "Debian"
+
+- name: 8.1.2 get and install telegraf RedHat
+  ansible.builtin.yum:
+    name: "https://dl.influxdata.com/telegraf/releases/{{ telegraf_rpm }}"
+  when: ansible_os_family == "RedHat"
+
+- name: 8.2 copy config files
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/telegraf/telegraf.d/{{ item }}"
+    mode: '0644'
+    owner: telegraf
+    group: telegraf
+  with_items:
+    - outputs.conf
+    - inputs_common.conf
+
+- name: 8.3 copy inputs template
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/telegraf/telegraf.d/{{ item }}"
+    mode: '0644'
+    owner: telegraf
+    group: telegraf
+  with_items:
+    - inputs.conf
+
+- name: 8.4 sudoers for LVM
+  community.general.sudoers:
+    name: telegraf-lvm
+    state: present
+    user: telegraf
+    runas: root
+    commands: /usr/sbin/pvs, /usr/sbin/vgs, /usr/sbin/lvs
+  when: telegraf_lvm == "true"
+
+- name: 8.5 sudoers for smart
+  community.general.sudoers:
+    name: telegraf-smart
+    state: present
+    user: telegraf
+    runas: root
+    commands: /usr/sbin/smartctl
+  when: telegraf_smart == "true"
+
+- name: 8.6 add telegraf into libvirt group
+  user:
+    name: telegraf
+    groups: libvirt
+  when: telegraf_libvirt == "true"
+
+- name: 8.7 capability for IPVS
+  ansible.builtin.lineinfile:
+    path: /etc/security/capability.conf
+    line: {item}
+  with_items:
+  - "cap_net_admin   telegraf"
+  - "cap_net_raw     telegraf"
+  when: telegraf_ipvs == "true"
+
+- name: 8.8.1 open firewall Ubuntu
+  community.general.ufw:
+    rule: allow
+    port: '9273'
+    proto: tcp
+  when: ansible_os_family == "Debian"
+
+- name: 8.8.2 open firewall RedHat
+  firewalld:
+    port: "9273/tcp"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: ansible_os_family == "RedHat"
+
+- name: 8.9 restart telegraf
+  ansible.builtin.systemd:
+    state: restarted
+    name: telegraf
+    enabled: yes
+    masked: no

@@ -1,6 +1,0 @@
-- name: DHCP
-  import_tasks: 1_dhcp.yml
-
-- name: DNS
-  import_tasks: 2_dns.yml
-

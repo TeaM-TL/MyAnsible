@@ -1,1 +1,11 @@
 ---
+host_type: lamp
+zabbix_gui: "yes"
+
+# ------------------ telegraf common ----------------------
+telegraf_apache: "true"
+telegraf_mysql: "true"
+telegraf_phpfpm: "true"
+# ------------------ what to install ---------------------------
+apache_install: "true"
+mariadb_install: "true"

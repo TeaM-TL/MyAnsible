@@ -1,17 +1,21 @@
 ---
-- name: 1.1 Install keepalived on Ubuntu
+- name: 1.1.1 Install keepalived on Ubuntu
   apt:
     name: keepalived
     state: present
-  when: ansible_os_family == "Debian"
   notify: keepalived_restart
+  when:
+  - ansible_os_family == "Debian"
+  - keepalive_install == "true"
 
-- name: 1.1 Install keepalived on Oracle Linux
+- name: 1.1.2 Install keepalived on RedHat
   yum:
     name: keepalived
     state: present
-  when: ansible_os_family == "RedHat"
   notify: keepalived_restart
+  when:
+  - ansible_os_family == "RedHat"
+  - keepalive_install == "true"
 
 - ansible.posix.sysctl:
     name: net.ipv4.ip_nonlocal_bind
@@ -19,6 +23,7 @@
     sysctl_set: yes
     state: present
     reload: yes
+  when: keepalive_install == "true"
 
 - name: 1.3 Copy keepalive.conf
   template:
@@ -28,30 +33,37 @@
     owner: root
     group: root
   notify: keepalived_reload
+  when: keepalive_install == "true"
 
 - name: 1.4.1 Open port 112 in firewall in Ubuntu
   ufw:
     rule: allow
     src: 224.0.0.18
-  when: ansible_os_family == "Debian"
+  when:
+  - ansible_os_family == "Debian"
+  - keepalive_install == "true"
 
 - name: 1.4.2 Open port 112 in firewall in Ubuntu
   ufw:
     rule: allow
     dest: 224.0.0.18
-  when: ansible_os_family == "Debian"
+  when:
+  - ansible_os_family == "Debian"
+  - keepalive_install == "true"
 
-- name: 1.4 Open port 112 in firewall in OracleLinux
+- name: 1.4 Open port 112 in firewall in RedHat
   firewalld:
     rich_rule: rule protocol value="vrrp" accept
     permanent: yes
     immediate: yes
     state: enabled
-  when: ansible_os_family == "RedHat"
+  when:
+  - ansible_os_family == "RedHat"
+  - keepalive_install == "true"
 
 - name: 1.5 Enable and start keepalive
   systemd:
     name: keepalived
     state: started
     enabled: yes
-
+  when: keepalive_install == "true"

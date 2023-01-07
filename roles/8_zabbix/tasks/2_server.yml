@@ -7,7 +7,7 @@
     name: "{{ zabbix_server_packages }}"
     update_cache: yes
     state: present
-  when: zabbix_server == " yes"
+      #  when: zabbix_server == "yes"
   notify: zabbix-server-restarted
 
 - name: 2.2 configure server
@@ -24,6 +24,6 @@
   - { regex: '^(DBUser=).*',       line: '{{ zabbix_db_user }}' }
   - { regex: '^# (DBPassword=).*', line: '{{ zabbix_db_passwd }}' }
   - { regex: '^# (ListenIP=).*',   line: '0.0.0.0' }
-  when: zabbix_server == " yes"
+    #  when: zabbix_server == "yes"
   notify: zabbix-server-restarted
 

@@ -1,5 +1,5 @@
 ---
-- name: 2.1 install haproxy
+- name: 3.1 install pacemaker
   apt:
     name:
       - haproxy
@@ -10,7 +10,7 @@
   - ansible_os_family == "Debian"
   - haproxy_install == "true"
 
-- name: 2.2 copy config
+- name: 3.2 copy config
   template:
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
@@ -20,11 +20,4 @@
     backup: true
   notify: haproxy_reload
   when: haproxy_install == "true"
-
-- name: 2.3 DH2048
-  community.crypto.openssl_dhparam:
-  #openssl_dhparam:
-    path: /etc/haproxy/dhparams.pem
-    size: 2048
-#  command: openssl dhparam -out /etc/haproxy/dhparams.pem 2048
-  when: haproxy_install == "true"
+  pacemaker_install == "true"
