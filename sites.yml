@@ -11,7 +11,7 @@
     #- 2_ha
     #- 5_dnsmasq
     #- 8_prometheus
-    #- 8_telegraf
+    - 8_telegraf
 
     #- 6_lamp_apache
     #- 6_lamp_nginx

@@ -467,7 +467,7 @@
 #             "smtp://mail.localhost:25", "udp://127.0.0.1:4433",
 #             "/etc/ssl/certs/ssl-cert-snakeoil.pem",
 #             "/etc/mycerts/*.mydomain.org.pem", "file:///path/to/*.pem"]
-    sources = ["tcp://localhost:443"]
+    sources = [{{ telegraf_x509_sources }}]
 #   ## Timeout for SSL connection
 #   # timeout = "5s"
 #

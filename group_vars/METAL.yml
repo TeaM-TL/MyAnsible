@@ -28,7 +28,7 @@ telegraf_openldap: "true"
 telegraf_sensors: "true"
 telegraf_smart: "true"
 telegraf_x509_cert: "true"
-
+telegraf_x509_sources: '"tcp://localhost:9091", "https://localhost:443"'
 # ------------------ what to install ---------------------------
 prometheus_install: "true"
 dnsmasq_install: "true"
