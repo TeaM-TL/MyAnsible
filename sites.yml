@@ -1,13 +1,14 @@
 ---
 - name: Install my servers
-  hosts: all
+  #hosts: all
   #hosts: METAL
   #hosts: LAMP
+  hosts: SAMBA
   serial: true
   become: true
   gather_facts: true
   roles:
-    #- 1_standard
+    - 1_standard
     #- 2_ha
     #- 5_dnsmasq
     #- 8_prometheus

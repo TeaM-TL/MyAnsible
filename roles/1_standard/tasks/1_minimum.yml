@@ -22,30 +22,46 @@
     name: "{{ packages_common }}"
     state: present
 
-- name: 1.4 Remove old certificates of Cockpit and default
+- name: 1.4 install required Samba packages
+  apt:
+    name:
+      - samba
+      - winbind
+      - smbclient
+    state: present
+  when:
+    - samba_install == "true"
+
+- name: 1.5 Remove old certificates of Cockpit and default
   file:
     path: "{{ item }}"
     state: absent
-  with_items:
-    - "/etc/cockpit/ws-certs.d/0-self-signed-ca.pem"
-    - "/etc/cockpit/ws-certs.d/0-self-signed.cert"
-    - "/etc/ssl/private/ssl-cert-snakeoil.key"
-    - "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+  with_fileglob:
+    - "/etc/cockpit/ws-certs.d/*"
 
-- name: 1.5 copy configs
+- name: 1.6 copy certs
   copy:
     src: "{{ item.src}}"
     dest: "{{ item.dest }}"
-    owner: root
-    group: "{{ item.group }}"
+    owner: "root"
+    group: "root"
     mode: "0644"
   with_items:
-    - { src: "ca.pem",                         dest: "/usr/local/share/ca-certificates/ca.crt",             group: "root" }
-    - { src: "{{ ansible_hostname }}.crt",     dest: "/etc/ssl/certs/{{ ansible_hostname }}.crt",                 group: "root" }
-    - { src: "{{ ansible_hostname }}-key.pem", dest: "/etc/ssl/private/privkey.pem",                        group: "root" }
-    - { src: "{{ ansible_hostname }}.pem",     dest: "/etc/ssl/{{ ansible_hostname }}.pem",                 group: "root" }
-    - { src: "{{ ansible_hostname }}.pem",     dest: "/etc/cockpit/ws-certs.d/{{ ansible_hostname }}.cert", group: "cockpit-ws" }
+    - { src: "ca.pem",                         dest: "/usr/local/share/ca-certificates/ca.crt", }
+    - { src: "{{ ansible_hostname }}.crt",     dest: "/etc/ssl/{{ ansible_hostname }}.pem" }
+    - { src: "{{ ansible_hostname }}-key.pem", dest: "/etc/ssl/private/privkey.pem" }
+    - { src: "{{ ansible_hostname }}.pem",     dest: "/etc/ssl/certs/{{ ansible_hostname }}.pem"}
+
+- name: 1.7 create symlinks certs for cockpit
+  ansible.builtin.file:
+    src: "/etc/ssl/{{ item.src }}"
+    dest: "/etc/cockpit/ws-certs.d/{{ item.dest }}"
+    state: link
+  with_items:
+    - { src: "private/privkey.pem",              dest: "{{ ansible_hostname }}.key" }
+    - { src: "certs/{{ ansible_hostname }}.pem", dest: "{{ ansible_hostname }}.cert" }
   notify: "restart cockpit daemon"
 
-- name: 1.6 update CA certs
+- name: 1.8 update CA certs
   command: update-ca-certificates
+

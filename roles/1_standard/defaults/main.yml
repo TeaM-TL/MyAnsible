@@ -1,3 +1,3 @@
 ---
 time_server: "server 192.168.0.197 iburst"
-
+samba_install: "false"

@@ -1,0 +1,7 @@
+---
+host_type: samba
+
+# ------------------ telegraf common ----------------------
+
+# ------------------ what to install ---------------------------
+samba_install: "true"
