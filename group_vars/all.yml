@@ -2,6 +2,9 @@
 domain_name: team-tl.intranet
 opendj_context: "dc=team-tl,dc=local"
 
+default_dns: 192.168.0.197
+time_server: "server 192.168.0.197 iburst"
+
 packages_common:
   - cockpit
   - cockpit-ws
@@ -10,8 +13,10 @@ packages_common:
   - cockpit-packagekit
   - cockpit-networkmanager
   - ldap-utils
+  - libnss-ldap
+  - libpam-ldap
   - tmux
   - tree
   - unzip
   - vim
-
+  #- openssh-ldap

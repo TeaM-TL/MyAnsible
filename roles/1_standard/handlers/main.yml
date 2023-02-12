@@ -1,8 +1,21 @@
 ---
-- name: restart daemon
+- name: restart cockpit
   ansible.builtin.systemd:
     name: cockpit
     state: restarted
     enabled: true
-  listen: restart cockpit daemon
+  listen: restart-cockpit-daemon
 
+- name: restart ssh
+  ansible.builtin.systemd:
+    name: ssh
+    state: restarted
+    enabled: true
+  listen: restart-sshd-daemon
+
+- name: restart chrony
+  ansible.builtin.systemd:
+    name: chrony
+    state: restarted
+    enabled: true
+  listen: restart-chrony-daemon

@@ -7,9 +7,10 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   with_items:
-    - { src: "vimrc",      dest: "/etc/skel/.vimrc",                    owner: "root", group: "root", mode: "644" }
-    - { src: "vimrc",      dest: "/root/.vimrc",                        owner: "root", group: "root", mode: "644" }
-    - { src: "vimrc",      dest: "/home/tlu/.vimrc",                    owner: "tlu",  group: "tlu",  mode: "644" }
+    - { src: "vimrc", dest: "/etc/skel/.vimrc", owner: "root", group: "root", mode: "644" }
+    - { src: "vimrc", dest: "/root/.vimrc",     owner: "root", group: "root", mode: "644" }
+    - { src: "vimrc", dest: "/home/tlu/.vimrc", owner: "tlu",  group: "tlu",  mode: "644" }
+#    - { src: "ldapAuthSSH.sh", dest: "/usr/local/bin/ldapAuthSSH.sh", owner: "root", group: "root", mode: "644" }
 
 - name: 1.2 apt update
   apt:
@@ -22,24 +23,14 @@
     name: "{{ packages_common }}"
     state: present
 
-- name: 1.4 install required Samba packages
-  apt:
-    name:
-      - samba
-      - winbind
-      - smbclient
-    state: present
-  when:
-    - samba_install == "true"
-
-- name: 1.5 Remove old certificates of Cockpit and default
+- name: 1.4 Remove old certificates of Cockpit and default
   file:
     path: "{{ item }}"
     state: absent
   with_fileglob:
     - "/etc/cockpit/ws-certs.d/*"
 
-- name: 1.6 copy certs
+- name: 1.5 copy certs
   copy:
     src: "{{ item.src}}"
     dest: "{{ item.dest }}"
@@ -52,7 +43,7 @@
     - { src: "{{ ansible_hostname }}-key.pem", dest: "/etc/ssl/private/privkey.pem" }
     - { src: "{{ ansible_hostname }}.pem",     dest: "/etc/ssl/certs/{{ ansible_hostname }}.pem"}
 
-- name: 1.7 create symlinks certs for cockpit
+- name: 1.6 create symlinks certs for cockpit
   ansible.builtin.file:
     src: "/etc/ssl/{{ item.src }}"
     dest: "/etc/cockpit/ws-certs.d/{{ item.dest }}"
@@ -60,8 +51,31 @@
   with_items:
     - { src: "private/privkey.pem",              dest: "{{ ansible_hostname }}.key" }
     - { src: "certs/{{ ansible_hostname }}.pem", dest: "{{ ansible_hostname }}.cert" }
-  notify: "restart cockpit daemon"
+  notify: "restart-cockpit-daemon"
 
-- name: 1.8 update CA certs
+- name: 1.7 update CA certs
   command: update-ca-certificates
 
+- name: 1.8 add domainname
+  ansible.builtin.hostname:
+    name: "{{ ansible_hostname }}.{{ domain_name }}"
+
+- name: 1.9 enable firewall
+  community.general.ufw:
+    state: enabled
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  with_items:
+    - { port: 22, proto: "tcp" }
+    - { port: 9090, proto: "tcp" }
+  when: 
+    - ansible_os_family == "Debian"
+
+#- name: 1.9 update sshd-config
+#  lineinfile:
+#    path: /etc/ssh/sshd_config
+#    regexp: '#AuthorizedKeysCommand none'
+#    line: 'AuthorizedKeysCommand /usr/local/bin/ldapAuthSSH.sh'
+#    backup: yes
+#  notify: "restart-sshd-daemon"

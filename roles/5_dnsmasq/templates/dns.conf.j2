@@ -10,7 +10,7 @@ bogus-priv
 # nie korzystaj z DNSów z pliku /etc/resolv.conf
 no-resolv
 
-# interfejs na którym ma słuchać, jeśli mamy klika, a checmy wybrać jeden
+# interfejs na którym ma słuchać, jeśli mamy kilka, a chcemy wybrać jeden
 #interface=enp0s25
 
 # wielkość bufora DNS
@@ -32,3 +32,5 @@ local={{ dnsmasq_local }}
 # Przekierowanie zapytań, pozwala odcinać dostęp do serwisów
 address={{ dnsmasq_address }}
 
+# For seurity -reject addresses from upstream nameservers which are in the private ranges.
+stop-dns-rebind

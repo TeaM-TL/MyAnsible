@@ -3,11 +3,15 @@
   apt:
     deb: "{{ duf_url_deb }}"
     state: present
-  when: ansible_os_family == "Debian"
+  when: 
+    - ansible_os_family == "Debian"
+    - duf_install == "true"
 
 - name: 3.2 Install DUF on Oracle Linux
   yum:
     rpm: "{{ duf_url_rpm }}"
     state: present
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
+    - duf_install == "true"
 
