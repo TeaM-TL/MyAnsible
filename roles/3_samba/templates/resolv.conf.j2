@@ -1,0 +1,6 @@
+domain {{ domain_name }}
+{% if host_type == "samba" %}
+nameserver 127.0.0.1
+{% else %}
+nameserver {{ default_dns }}
+{% endif %}

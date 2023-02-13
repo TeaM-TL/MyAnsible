@@ -1,0 +1,108 @@
+---
+- name: 5.1 install required Samba packages
+  apt:
+    name:
+      - krb5-config
+      - krb5-user
+      - samba
+      - smbclient
+      - winbind
+    state: present
+  when:
+    - samba_install == "true"
+
+- name: 5.2 disable services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+    masked: true
+  with_items:
+    - systemd-resolved
+    - smbd
+    - nmbd
+    - winbind
+  when:
+    - samba_install == "true"
+
+- name: 5.3 remove old
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/resolv.conf
+    - /var/lib/samba/private/krb5.conf
+
+- name: 5.4 templates
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+    - krb5.conf
+    - resolv.conf
+  when:
+    - samba_install == "true"
+
+- name: 5.5 symlinks for krb5.conf
+  ansible.builtin.file:
+    src: "/etc/krb5.conf"
+    dest: "/var/lib/samba/private/krb5.conf"
+    state: link
+
+- name: 5.6 open firewall Ubuntu
+  community.general.ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  with_items:
+    - { port: 137, proto: "udp" }
+    - { port: 138, proto: "udp" }
+    - { port: 139, proto: "tcp" }
+    - { port: 445, proto: "tcp" }
+    - { port: 88,  proto: "tcp" }
+    - { port: 88,  proto: "udp" }
+    - { port: 53,  proto: "tcp" }
+    - { port: 53,  proto: "udp" }
+    - { port: 636, proto: "tcp" }
+  when: 
+    - ansible_os_family == "Debian"
+    - samba_install == "true"
+
+
+- name: 5.8 Add TLS into samba.conf
+  ansible.builtin.lineinfile:
+    path: /etc/samba/smb.conf
+    search_string: '<FilesMatch ".php[45]?$">'
+    insertafter: '^\[global\]'
+    line: "    {{ item }}"
+  with_items:
+    - "tls keyfile  = tls/key.pem"
+    - "tls certfile = tls/cert.pem"
+    - "tls cafile   = tls/ca.pem"
+    - "tls enabled  = yes"
+  when: 
+    - samba_install == "true"
+
+- name: 5.9 symlinks for certs
+  ansible.builtin.file:
+    src: "/etc/ssl/{{ item.src }}"
+    dest: "/var/lib/samba/private/tls/{{ item.dest }}"
+    state: link
+  with_items:
+    - { src: "private/privkey.pem",              dest: "key.pem" }
+    - { src: "certs/{{ ansible_hostname }}.pem", dest: "cert.pem" }
+    - { src: "certs/ca.pem",                     dest: "cert.pem" }
+  when: 
+    - samba_install == "true"
+
+- name: 5.10 enable and start Samba AD
+  ansible.builtin.systemd:
+    name: samba-ad-dc
+    state: started
+    enabled: truse
+    masked: false
+  when:
+    - samba_install == "true"

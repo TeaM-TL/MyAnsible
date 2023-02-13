@@ -11,9 +11,6 @@
 - name: chrony
   import_tasks: 4_ntp2chrony.yaml
 
-- name: Samba
-  import_tasks: 5_samba.yml
-
 - name: autoremove and autoclean
   import_tasks: 9_remove_pkg.yml
 
