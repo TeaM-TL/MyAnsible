@@ -10,6 +10,7 @@
   roles:
     - 1_standard
     #- 2_ha
+    - 3_samba
     #- 5_dnsmasq
     #- 8_prometheus
     - 8_telegraf
