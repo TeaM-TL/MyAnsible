@@ -1,6 +1,7 @@
 ---
-domain_name: team-tl.intranet
-opendj_context: "dc=team-tl,dc=local"
+domain: team-tl
+domain_name: "{{ domain }}.intranet"
+opendj_context: "dc={{ domain }},dc=local"
 
 default_dns: 192.168.0.197
 time_server: "server 192.168.0.197 iburst"

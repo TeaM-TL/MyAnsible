@@ -7,3 +7,5 @@
 *.png
 *.tar
 *.zip
+.vault_pass
+.pwd
