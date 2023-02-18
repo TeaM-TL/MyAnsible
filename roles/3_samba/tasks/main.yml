@@ -96,11 +96,10 @@
     - samba_install == "true"
     - samba_dc_next == "true"
 
-- name: 5.9 Add dns-forwarder into smb.conf
+- name: 5.9 Replace dns-forwarder into smb.conf
   ansible.builtin.lineinfile:
     path: /etc/samba/smb.conf
-    search_string: '^.*dns forwarder.*$'
-    insertafter: '^\[global\]'
+    search_string: '127.0.0.1'
     line: "\tdns forwarder = {{ default_dns }}"
     backup: yes
   when:
@@ -110,9 +109,8 @@
 - name: 5.10 Add TLS into samba.conf
   ansible.builtin.lineinfile:
     path: /etc/samba/smb.conf
-    search_string: '<FilesMatch ".php[45]?$">'
     insertafter: '^\[global\]'
-    line: "    {{ item }}"
+    line: "\t{{ item }}"
     backup: yes
   with_items:
     - "tls keyfile  = tls/key.pem"
@@ -120,7 +118,7 @@
     - "tls cafile   = tls/ca.pem"
     - "tls enabled  = yes"
   when: 
-    - samba_install == "error"
+    - samba_install == "true"
 
 - name: 5.11 symlinks for certs
   ansible.builtin.file:
@@ -132,7 +130,7 @@
     - { src: "certs/{{ ansible_hostname }}.pem", dest: "cert.pem" }
     - { src: "certs/ca.pem",                     dest: "cert.pem" }
   when: 
-    - samba_install == "true"
+    - samba_install == "error"
 
 - name: 5.12 enable and start Samba AD
   ansible.builtin.systemd:

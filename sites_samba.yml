@@ -1,0 +1,11 @@
+---
+- name: Install my servers
+  hosts: SAMBA
+  serial: true
+  become: true
+  gather_facts: true
+  roles:
+    - 1_standard
+    - 3_samba
+    - 8_telegraf
+

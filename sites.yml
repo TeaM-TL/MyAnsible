@@ -3,17 +3,17 @@
   #hosts: all
   #hosts: METAL
   #hosts: LAMP
-  hosts: SAMBA
+  #hosts: SAMBA
   serial: true
   become: true
   gather_facts: true
   roles:
     - 1_standard
     #- 2_ha
-    - 3_samba
+    #- 3_samba
     #- 5_dnsmasq
     #- 8_prometheus
-    - 8_telegraf
+    #- 8_telegraf
 
     #- 6_lamp_apache
     #- 6_lamp_nginx
