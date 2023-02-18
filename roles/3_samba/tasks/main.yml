@@ -71,34 +71,42 @@
     - samba_install == "true"
 
 - name: 5.7 Provision AD domain
-  shell: 'samba-tool domain provision
+  shell: |
+      samba-tool domain provision
       --server-role=dc
       --use-rfc2307
       --dns-backend=SAMBA_INTERNAL
       --realm={{ domain_name | upper }}
       --domain={{ domain | upper }}
-      --adminpass='
+      --adminpass=={{ samba_password-administrator }}
   when:
     - samba_install == "true"
     - samba_dc_first == "true"
 
 - name: 5.8 Add new controller
-  shell: 'samba-tool domain join 
+  shell: |
+      samba-tool domain join
       {{ domain_name | upper }} 
       DC 
       -U "{{ ansible_hostname }}\administrator"
-      --adminpass=
+      --adminpass={{ samba_password-administrator }}
       --dns-backend=SAMBA_INTERNAL
       --option="dns forwarder={{ samba_first_dc_ip }}"
-      --option="idmap_ldb:use rfc2307 = yes"'
+      --option="idmap_ldb:use rfc2307 = yes"
   when:
     - samba_install == "true"
     - samba_dc_next == "true"
 
 - name: 5.9 Add dns-forwarder into smb.conf
+  ansible.builtin.lineinfile:
+    path: /etc/samba/smb.conf
+    search_string: '<FilesMatch ".php[45]?$">'
+    insertafter: '^\[global\]'
+    line: "    dns forwarder = {{ default_dns }}"
+    backup: yes
   when:
     - samba_install == "true"
-    - samba_dc_next == "true"
+    - samba_dc_first == "true"
 
 - name: 5.10 Add TLS into samba.conf
   ansible.builtin.lineinfile:
@@ -106,6 +114,7 @@
     search_string: '<FilesMatch ".php[45]?$">'
     insertafter: '^\[global\]'
     line: "    {{ item }}"
+    backup: yes
   with_items:
     - "tls keyfile  = tls/key.pem"
     - "tls certfile = tls/cert.pem"
