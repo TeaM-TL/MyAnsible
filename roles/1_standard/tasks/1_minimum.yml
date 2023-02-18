@@ -71,11 +71,3 @@
     - { port: 9090, proto: "tcp" }
   when: 
     - ansible_os_family == "Debian"
-
-#- name: 1.9 update sshd-config
-#  lineinfile:
-#    path: /etc/ssh/sshd_config
-#    regexp: '#AuthorizedKeysCommand none'
-#    line: 'AuthorizedKeysCommand /usr/local/bin/ldapAuthSSH.sh'
-#    backup: yes
-#  notify: "restart-sshd-daemon"

@@ -6,6 +6,8 @@ opendj_context: "dc={{ domain }},dc=local"
 default_dns: 192.168.0.197
 time_server: "server 192.168.0.197 iburst"
 
+duf_install: true
+
 packages_common:
   - cockpit
   - cockpit-ws

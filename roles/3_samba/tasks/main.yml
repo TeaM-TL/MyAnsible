@@ -31,6 +31,7 @@
   with_items:
     - /etc/resolv.conf
     - /var/lib/samba/private/krb5.conf
+    - /etc/samba/smb.conf
 
 - name: 5.4 templates
   template:
@@ -71,28 +72,26 @@
     - samba_install == "true"
 
 - name: 5.7 Provision AD domain
-  shell: |
-      samba-tool domain provision
+  shell: 'samba-tool domain provision
       --server-role=dc
       --use-rfc2307
       --dns-backend=SAMBA_INTERNAL
       --realm={{ domain_name | upper }}
       --domain={{ domain | upper }}
-      --adminpass=={{ samba_password-administrator }}
+      --adminpass=={{ samba_password_administrator }}'
   when:
     - samba_install == "true"
     - samba_dc_first == "true"
 
 - name: 5.8 Add new controller
-  shell: |
-      samba-tool domain join
+  shell: 'samba-tool domain join
       {{ domain_name | upper }} 
       DC 
       -U "{{ ansible_hostname }}\administrator"
-      --adminpass={{ samba_password-administrator }}
+      --adminpass={{ samba_password_administrator }}
       --dns-backend=SAMBA_INTERNAL
       --option="dns forwarder={{ samba_first_dc_ip }}"
-      --option="idmap_ldb:use rfc2307 = yes"
+      --option="idmap_ldb:use rfc2307 = yes"'
   when:
     - samba_install == "true"
     - samba_dc_next == "true"
@@ -139,7 +138,7 @@
   ansible.builtin.systemd:
     name: samba-ad-dc
     state: started
-    enabled: truse
+    enabled: true
     masked: false
   when:
     - samba_install == "true"
