@@ -99,9 +99,9 @@
 - name: 5.9 Add dns-forwarder into smb.conf
   ansible.builtin.lineinfile:
     path: /etc/samba/smb.conf
-    search_string: '<FilesMatch ".php[45]?$">'
+    search_string: '^.*dns forwarder.*$'
     insertafter: '^\[global\]'
-    line: "    dns forwarder = {{ default_dns }}"
+    line: "\tdns forwarder = {{ default_dns }}"
     backup: yes
   when:
     - samba_install == "true"
@@ -120,7 +120,7 @@
     - "tls cafile   = tls/ca.pem"
     - "tls enabled  = yes"
   when: 
-    - samba_install == "true"
+    - samba_install == "error"
 
 - name: 5.11 symlinks for certs
   ansible.builtin.file:
