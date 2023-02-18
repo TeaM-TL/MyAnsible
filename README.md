@@ -42,11 +42,13 @@ If there are differences between hosts in groups - apear in host_vars.
 - telegraf - agent
 - prometheus - data collector, alert manager
 
+### Samba
+- samba as AD DC, and join DC into existing AD
+- change secrets, domain name and fire!
+
 ---
 
 ## To Do
-
-### secrets
 
 ### Apache
 - apache - install Apache web server with HTTPS
