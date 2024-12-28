@@ -1,0 +1,50 @@
+---
+- name: 8.1 get and install pometheus Ubuntu
+  ansible.builtin.apt:
+    name: "prometheus"
+  when: 
+  - ansible_os_family == "Debian"
+  - prometheus_install == "true"
+
+- name: 8.2 get and install pometheus RedHat
+  ansible.builtin.yum:
+    name: "prometheus"
+  when: 
+  - ansible_os_family == "RedHat"
+  - prometheus_install == "true"
+
+- name: 8.3 copy config files
+  copy:
+    src: "prometheus.yml"
+    dest: "/etc/prometheus/prometheus.yml"
+    mode: '0644'
+    owner: prometheus
+    group: prometheus
+  when: prometheus_install == "true"
+
+- name: 8.4 open firewall Ubuntu
+  community.general.ufw:
+    rule: allow
+    port: '9090'
+    proto: tcp
+  when: 
+  - ansible_os_family == "Debian"
+  - prometheus_install == "true"
+
+- name: 8.5 open firewall RedHat
+  firewalld:
+    port: "9090/tcp"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: 
+  - ansible_os_family == "RedHat"
+  - prometheus_install == "true"
+
+- name: 8.6 restart prometheus
+  ansible.builtin.systemd:
+    state: restarted
+    name: prometheus
+    enabled: yes
+    masked: no
+  when: prometheus_install == "true"
